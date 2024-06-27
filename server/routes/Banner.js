@@ -1,41 +1,54 @@
 import express from "express";
+import Joi from "joi";
 import Banner from "../models/Banner/BannerModel.js";
 
 const routerBanner = express.Router();
 
-routerBanner.post("/check-duplicate", async (req, res, next) => {
-  try {
-    const { id_banner } = req.body;
-
-    const existingBanner = await Banner.findOne({ id_banner });
-
-    if (existingBanner) {
-      return res.json({ exists: true });
-    } else {
-      return res.json({ exists: false });
-    }
-  } catch (error) {
-    return next(error);
-  }
+// Schema validate bằng Joi
+const bannerSchema = Joi.object({
+  id_banner: Joi.string().required().messages({
+    "string.empty": "ID là bắt buộc",
+  }),
+  link: Joi.string().uri().required().messages({
+    "string.uri": "Link phải là URL hợp lệ",
+  }),
+  image: Joi.string().uri().required().messages({
+    "string.uri": "Image phải là URL hợp lệ",
+  }),
+  ngaybatdau: Joi.date().iso().required().messages({
+    "date.format": "Ngày bắt đầu phải là ngày hợp lệ",
+  }),
+  ngayketthuc: Joi.date().iso().required().messages({
+    "date.format": "Ngày kết thúc phải là ngày hợp lệ",
+  }),
+  uutien: Joi.number().integer().min(0).required().messages({
+    "number.base": "Ưu tiên phải là số nguyên không âm",
+  }),
+  hien_thi: Joi.boolean().required().messages({
+    "boolean.base": "Hiển thị phải là giá trị boolean",
+  }),
 });
 
-routerBanner.get("/list", async (req, res, next) => {
-  try {
-    const listBanner = await Banner.find({});
-    res.json({ success: true, data: listBanner });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+// Middleware validate bằng Joi
+const validate = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      errors: error.details.map((detail) => ({
+        message: detail.message,
+        path: detail.path,
+      })),
+    });
   }
-});
+  next();
+};
 
-routerBanner.post("/add", async (req, res, next) => {
+routerBanner.post("/add", validate(bannerSchema), async (req, res, next) => {
   try {
     const {
       id_banner,
       link,
       image,
-      view,
       ngaybatdau,
       ngayketthuc,
       uutien,
@@ -46,7 +59,6 @@ routerBanner.post("/add", async (req, res, next) => {
       id_banner,
       link,
       image,
-      view,
       ngaybatdau,
       ngayketthuc,
       uutien,
@@ -61,31 +73,32 @@ routerBanner.post("/add", async (req, res, next) => {
   }
 });
 
-routerBanner.put("/edit", async (req, res, next) => {
+routerBanner.put("/edit", validate(bannerSchema), async (req, res, next) => {
   try {
     const {
       id_banner,
       link,
       image,
-      view,
+
       ngaybatdau,
       ngayketthuc,
       uutien,
       hien_thi,
     } = req.body;
     const item = await Banner.findById(id_banner);
-    console.log(item);
     if (item) {
       await Banner.findByIdAndUpdate(id_banner, {
         link,
         image,
-        view,
+
         ngaybatdau,
         ngayketthuc,
         uutien,
         hien_thi,
       });
       res.json({ status: 1, message: "Sửa banner thành công" });
+    } else {
+      res.json({ status: 0, message: "Không tìm thấy banner" });
     }
   } catch (err) {
     res.json({ status: 0, message: "Sửa banner thất bại" });
