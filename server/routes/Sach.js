@@ -1,21 +1,21 @@
 import SachModel from "../models/Sach/SachModel.js";
-
 import express from "express";
 
 const routerSach = express.Router();
 
+// Route kiểm tra sản phẩm trùng
 routerSach.post("/check-duplicate", async (req, res, next) => {
   try {
-    const { ten } = req.body;
+    const { name } = req.body;
 
-    // Tìm sản phẩm trong database dựa trên tên
-    const existingSach = await Product.findOne({ ten });
+    // Tìm sách trong database dựa trên tên
+    const existingSach = await SachModel.findOne({ name });
 
     if (existingSach) {
-      // Nếu sản phẩm đã tồn tại, trả về thông báo
+      // Nếu sách đã tồn tại, trả về thông báo
       return res.json({ exists: true });
     } else {
-      // Nếu sản phẩm chưa tồn tại, trả về thông báo
+      // Nếu sách chưa tồn tại, trả về thông báo
       return res.json({ exists: false });
     }
   } catch (error) {
@@ -23,7 +23,8 @@ routerSach.post("/check-duplicate", async (req, res, next) => {
   }
 });
 
-routerSach.get("/list", async function (req, res, next) {
+// Route lấy danh sách sách
+routerSach.get("/list", async (req, res, next) => {
   try {
     const listSach = await SachModel.find({});
     res.json({ success: true, data: listSach });
@@ -33,19 +34,49 @@ routerSach.get("/list", async function (req, res, next) {
   }
 });
 
-routerSach.post("/add", async function (req, res, next) {
+// Route thêm sách mới
+routerSach.post("/add", async (req, res, next) => {
   try {
-    const { ten, nxb, anh, mieuta, ngayxuatban, ngaytao, language } = req.body;
-
-    const newSach = {
-      ten,
+    const {
+      id,
+      author,
       nxb,
-      anh,
-      mieuta,
+      img,
+      description,
       ngayxuatban,
       ngaytao,
+      isRecommended,
+      favorite,
+      type,
+      name,
+      view,
+      price,
+      recommendedPriority,
+      star,
+      sold,
+      language,
+    } = req.body;
+
+    const newSach = {
+      id,
+      author,
+      nxb,
+      img,
+      description,
+      ngayxuatban,
+      ngaytao,
+      isRecommended,
+      favorite,
+      type,
+      name,
+      view,
+      price,
+      recommendedPriority,
+      star,
+      sold,
       language,
     };
+
     await SachModel.create(newSach);
 
     res.json({ status: 1, message: "Thêm sản phẩm thành công" });
@@ -53,70 +84,42 @@ routerSach.post("/add", async function (req, res, next) {
     console.error("Error adding product:", err);
     res.json({ status: 0, message: "Thêm sản phẩm thất bại" });
   }
-  const listSach = await SachModel.find({});
 });
 
-routerSach.put("/edit", async function (req, res, next) {
+// Route sửa thông tin sách
+routerSach.put("/edit/:id", async (req, res, next) => {
   try {
-    const { id_sach, ten, nxb, anh, mieuta, ngayxuatban, ngaytao, language } =
-      req.body;
-    var item = await SachSchema.findById(id_sach);
-    console.log(item);
-    if (item) {
-      const SachModel = await SachSchema.findByIdAndUpdate(id_sach, {
-        ten,
-        nxb,
-        anh,
-        mieuta,
-        ngayxuatban,
-        ngaytao,
-        language,
-      });
-      res.json({ status: 1, message: "Sửa sản phẩm thành công" });
-    }
-  } catch (err) {
-    res.json({ status: 0, message: "Sửa sản phẩm thất bại" });
-  }
-  const listSach = await SachModel.find({});
-});
-//delete
-routerSach.get("/delete", async function (req, res, next) {
-  try {
-    var id_sach = req.body.id_sach;
-    await SachModel.findByIdAndDelete(id_sach);
-    res.json({ status: 1, message: "Xóa sản phẩm thành công" });
-  } catch (err) {
-    res.json({ status: 0, message: "Xóa sản phẩm thất bại", err: err });
-  }
-  const listSach = await SachModel.find({});
-});
-routerSach.put("/:id_sach", async function (req, res, next) {
-  try {
-    var id_sach = req.params.id_sach; // Retrieve the product ID from the URL parameters
-    const updatedSach = await SachModel.findByIdAndUpdate(id_sach, req.body, {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const updatedSach = await SachModel.findByIdAndUpdate(id, updates, {
       new: true,
     });
-    res.json({
-      status: 1,
-      message: "Cập nhật sản phẩm thành công",
-      updatedSach,
-    });
+
+    if (!updatedSach) {
+      return res.json({
+        status: 0,
+        message: "Không tìm thấy sách để cập nhật",
+      });
+    }
+
+    res.json({ status: 1, message: "Sửa sản phẩm thành công", updatedSach });
   } catch (err) {
-    res.json({ status: 0, message: "Cập nhật sản phẩm thất bại", err: err });
+    res.json({ status: 0, message: "Sửa sản phẩm thất bại", err: err.message });
   }
-  const listSach = await SachModel.find({});
 });
 
-routerSach.delete("/:ten", async function (req, res, next) {
+// Route xóa sách
+routerSach.delete("/delete/:id", async (req, res, next) => {
   try {
-    let { ten } = req.params;
-    await SachModel.deleteOne({ ten: ten });
-    res.json({ status: true });
-  } catch (error) {
-    console.log(error);
-    res.json({ status: false });
+    const { id } = req.params;
+
+    await SachModel.findByIdAndDelete(id);
+
+    res.json({ status: 1, message: "Xóa sản phẩm thành công" });
+  } catch (err) {
+    res.json({ status: 0, message: "Xóa sản phẩm thất bại", err: err.message });
   }
-  const listSach = await SachModel.find({});
 });
 
 export default routerSach;
