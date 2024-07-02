@@ -44,7 +44,7 @@ routerUser.post("/add", async function (req, res, next) {
       loaitaikhoan,
     } = req.body;
 
-    if (loaitaikhoan == 0) {
+    if (loaitaikhoan !== 0) {
       return res
         .status(400)
         .json({ status: 0, message: "Loại tài khoản phải là người dùng" });
@@ -91,22 +91,23 @@ routerUser.put("/edit", async function (req, res, next) {
 });
 
 // Xóa người dùng bình thường
-routerUser.delete("/:ten", async function (req, res, next) {
+routerUser.delete("/:id", async function (req, res, next) {
   try {
-    let { ten } = req.params;
-    const user = await UserModel.findOne({ ten });
-    if (user && user.loaitaikhoan === 0) {
-      await UserModel.deleteOne({ ten });
-      res.json({ status: true });
-    } else {
-      res.status(404).json({
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+
+    if (!user || user.loaitaikhoan !== 0) {
+      return res.status(404).json({
         status: false,
         message:
           "Người dùng không tồn tại hoặc không phải người dùng bình thường",
       });
     }
+
+    await UserModel.deleteOne({ _id: id });
+    res.json({ status: true, message: "Xóa người dùng thành công" });
   } catch (error) {
-    console.log(error);
+    console.error("Lỗi khi xóa người dùng:", error);
     res.json({ status: false, message: "Xóa người dùng thất bại" });
   }
 });

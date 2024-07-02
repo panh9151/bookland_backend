@@ -2,11 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  id_user: {
-    type: String,
-    unique: true,
-    required: true,
-  },
+  id_user: { type: Schema.Types.ObjectId },
   loaitaikhoan: {
     type: Number,
     enum: [0, 1],

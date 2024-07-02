@@ -17,17 +17,8 @@ routerAdmin.get("/list", async function (req, res, next) {
 // Thêm admin
 routerAdmin.post("/add", async function (req, res, next) {
   try {
-    const {
-      id_user,
-      ten,
-      password,
-      email,
-      gioitinh,
-      avt,
-      sdt,
-      ngaytao,
-      loaitaikhoan,
-    } = req.body;
+    const { ten, password, email, gioitinh, avt, sdt, ngaytao, loaitaikhoan } =
+      req.body;
 
     if (loaitaikhoan !== 1) {
       return res
@@ -36,7 +27,6 @@ routerAdmin.post("/add", async function (req, res, next) {
     }
 
     const newAdmin = {
-      id_user,
       ten,
       password,
       email,
@@ -75,21 +65,22 @@ routerAdmin.put("/edit", async function (req, res, next) {
 });
 
 // Xóa admin
-routerAdmin.delete("/:ten", async function (req, res, next) {
+routerAdmin.delete("/delete/:id", async function (req, res, next) {
   try {
-    let { ten } = req.params;
-    const user = await UserModel.findOne({ ten });
-    if (user && user.loaitaikhoan === 1) {
-      await UserModel.deleteOne({ ten });
-      res.json({ status: true });
-    } else {
-      res.status(404).json({
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+
+    if (!user || user.loaitaikhoan !== 1) {
+      return res.status(404).json({
         status: false,
         message: "Admin không tồn tại hoặc không phải admin",
       });
     }
+
+    await UserModel.deleteOne({ _id: id });
+    res.json({ status: true, message: "Xóa admin thành công" });
   } catch (error) {
-    console.log(error);
+    console.error("Lỗi khi xóa admin:", error);
     res.json({ status: false, message: "Xóa admin thất bại" });
   }
 });

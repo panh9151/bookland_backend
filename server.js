@@ -10,6 +10,7 @@ import routerTheLoai from "./routes/TheLoai.js";
 import routerReview from "./routes/Review.js";
 import routerOrder from "./routes/Order.js";
 import routerVoucher from "./routes/Voucher.js";
+import routerSachDetail from "./routes/SachDetail.js";
 
 //app config
 const app = express();
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api/add, routerSach");
+app.use("/api/Detail", routerSachDetail);
 app.use("/api/Admin", routerAdmin);
 app.use("/api/User", routerUser);
 app.use("/api/Sach", routerSach);

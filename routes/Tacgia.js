@@ -89,14 +89,15 @@ routerTacgia.put("/edit", async function (req, res, next) {
   }
 });
 
-routerTacgia.delete("/:ten", async function (req, res, next) {
+routerTacgia.delete("/:id", async function (req, res, next) {
   try {
-    let { ten } = req.params;
-    await TacgiaModel.deleteOne({ ten: ten });
+    const { id } = req.params;
+
+    await TacgiaModel.deleteOne({ _id: id });
     const listTacgia = await TacgiaModel.find({});
     res.json({ status: true, data: listTacgia });
   } catch (error) {
-    console.log(error);
+    console.error("Lỗi khi xóa tác giả:", error);
     res.json({ status: false });
   }
 });
