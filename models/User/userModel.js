@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   loaitaikhoan: {
     type: Number,
     enum: [0, 1],
-    required: true,
+    default: 0,
   },
   // 0 - User
   // 1 - Admin

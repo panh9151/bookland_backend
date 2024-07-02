@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-// const Schema = mongoose.Schema;
-// const ObjectId = Schema.ObjectId;
-const SachSchema = new mongoose.Schema({
-  id: { type: String, unique: true, required: true },
-  id_tacgia: { type: String },
+
+const { Schema } = mongoose;
+
+const SachSchema = new Schema({
+  id_tacgia: { type: Schema.Types.ObjectId, ref: "TacGia", required: true },
   nxb: { type: String },
   img: { type: String, required: true },
   description: { type: String },
   ngayxuatban: { type: Date },
-  ngaytao: { type: Date },
+  ngaytao: { type: Date, default: Date.now },
   isRecommended: { type: Boolean, default: false, required: true },
   ten: { type: String, required: true },
   view: { type: Number, default: 0, required: true },
@@ -17,9 +17,7 @@ const SachSchema = new mongoose.Schema({
   star: { type: Number, required: true },
   sold: { type: Number, default: 0, required: true },
   language: { type: String },
-  hien_thi: { type: Boolean, default: true, required: true }
+  hien_thi: { type: Boolean, default: true, required: true },
 });
 
-const SachModel = mongoose.model("Sach", SachSchema);
-
-export default SachModel;
+export default mongoose.model("Sach", SachSchema);

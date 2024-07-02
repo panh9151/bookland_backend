@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const TacgiaSchema = new Schema({
   id_tacgia: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "TacGia",
     unique: true,
     required: true,
   },
