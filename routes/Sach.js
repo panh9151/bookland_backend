@@ -2,6 +2,7 @@ import express from "express";
 import SachModel from "../models/Sach/SachModel.js";
 
 const routerSach = express.Router();
+// const theloai = await TheloaiModel.find().populate("ten,img,id_theloai");
 
 // Kiểm tra sách trùng lặp theo tên
 routerSach.post("/check-duplicate", async (req, res, next) => {
@@ -22,7 +23,7 @@ routerSach.post("/check-duplicate", async (req, res, next) => {
 // Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {
-    const listSach = await SachModel.find({});
+    const listSach = await SachModel.find().populate("theloai", "ten, img");
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error(error);
@@ -49,6 +50,7 @@ routerSach.post("/add", async (req, res, next) => {
       sold,
       language,
       hien_thi,
+      theloai,
     } = req.body;
 
     const newSach = new SachModel({
@@ -67,6 +69,7 @@ routerSach.post("/add", async (req, res, next) => {
       sold,
       language,
       hien_thi,
+      theloai,
     });
 
     await newSach.save();

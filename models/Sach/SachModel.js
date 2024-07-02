@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const SachSchema = new Schema({
-  id_tacgia: { type: Schema.Types.ObjectId, ref: "TacGia", required: true },
+  id_tacgia: [{ type: Schema.Types.ObjectId, ref: "TacGia", required: true }],
   nxb: { type: String },
   img: { type: String, required: true },
   description: { type: String },
@@ -16,7 +16,10 @@ const SachSchema = new Schema({
   star: { type: Number, required: true },
   sold: { type: Number, default: 0, required: true },
   language: { type: String },
+  theloai: [
+    { type: Schema.Types.ObjectId, ref: "TheloaiModel", required: true },
+  ],
   hien_thi: { type: Boolean, default: true, required: true },
 });
-
+const SachModel = mongoose.model("Sach", SachSchema);
 export default mongoose.model("Sach", SachSchema);
