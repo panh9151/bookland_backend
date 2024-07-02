@@ -38,9 +38,8 @@ routerOrder.post("/add", async (req, res, next) => {
 
     const newOrder = {
       id_order,
-      customer,
+      nguoinhan,
       items,
-      total_price,
       order_date,
       status,
     };

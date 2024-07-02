@@ -17,6 +17,8 @@ const OrderDetailSchema = new Schema({
     ref: "Order",
     required: true,
   },
+  price: { type: Number, required: true },
+  soluong: { type: Number, required: true }
 });
 
 module.exports =

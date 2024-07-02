@@ -26,15 +26,11 @@ const UserSchema = new Schema({
   ten: {
     type: String,
   },
-  tichdiem: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
+
   gioitinh: {
     type: Number,
     enum: [0, 1],
-    required: true,
+    default: 0,
   },
 
   // 0 - Nam
@@ -46,16 +42,14 @@ const UserSchema = new Schema({
     type: Date,
   },
   sdt: {
-    type: String,
+    type: Number,
   },
-  sdt_thanhtoan: {
-    type: String,
-  },
+
   ngaytao: {
     type: Date,
     default: Date.now,
   },
-  id_google: {
+  id_gmail: {
     type: String,
   },
   id_facebook: {

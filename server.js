@@ -2,13 +2,14 @@ import express, { Router } from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import routerSach from "./routes/Sach.js";
-import routerUser from "./routes/User.js";
+import { routerUser, routerAdmin } from "./routes/User.js";
 import routerTacgia from "./routes/Tacgia.js";
 import routerBanner from "./routes/Banner.js";
 import routerTheLoai from "./routes/TheLoai.js";
 import routerReview from "./routes/Review.js";
 import routerOrder from "./routes/Order.js";
 import routerVoucher from "./routes/Voucher.js";
+
 //app config
 const app = express();
 const port = 8181;
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api/add, routerSach");
+app.use("/api/Admin", routerAdmin);
 app.use("/api/User", routerUser);
 app.use("/api/Sach", routerSach);
 app.use("/api/tacgia", routerTacgia);
