@@ -1,43 +1,38 @@
 import mongoose from "mongoose";
-const { Schema } = mongoose;
 
-const BannerSchema = new Schema(
-  {
-    id_banner: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    link: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-    },
-    view: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    ngaybatdau: {
-      type: Date,
-    },
-    ngayketthuc: {
-      type: Date,
-    },
-    uutien: {
-      type: Number,
-    },
-    hien_thi: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
+const Schema = mongoose.Schema;
+
+const BannerSchema = new Schema({
+  url: {
+    type: String,
+    required: true,
   },
-  { timestamps: true }
-); // tự động thêm timestamp
+  image: {
+    type: String,
+    required: true,
+  },
+  view: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  ngaybatdau: {
+    type: Date,
+    required: true,
+  },
+  ngayketthuc: {
+    type: Date,
+    required: true,
+  },
+  uutien: {
+    type: Number,
+  },
+  hien_thi: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+});
 
-const Banner = mongoose.model("Banner", BannerSchema);
-export default Banner;
+const BannerModel = mongoose.model("Banner", BannerSchema);
+export default BannerModel;

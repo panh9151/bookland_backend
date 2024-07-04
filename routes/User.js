@@ -112,6 +112,4 @@ routerUser.delete("/:id", async function (req, res, next) {
   }
 });
 
-// Các router tương tự cho Admin (loaitaikhoan: 1)
-
 export default routerUser;
