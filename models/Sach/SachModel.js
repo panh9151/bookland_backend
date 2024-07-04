@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const SachSchema = new Schema({
-  id_tacgia: [{ type: Schema.Types.ObjectId, ref: "TacGia", required: true }],
+  tacgia: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tacgia",
+    required: true,
+  },
   nxb: { type: String },
   img: { type: String, required: true },
   description: { type: String },
@@ -17,9 +21,14 @@ const SachSchema = new Schema({
   sold: { type: Number, default: 0, required: true },
   language: { type: String },
   theloai: [
-    { type: Schema.Types.ObjectId, ref: "TheloaiModel", required: true },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TheLoai",
+      required: true,
+    },
   ],
   hien_thi: { type: Boolean, default: true, required: true },
 });
+
 const SachModel = mongoose.model("Sach", SachSchema);
-export default mongoose.model("Sach", SachSchema);
+export default SachModel;

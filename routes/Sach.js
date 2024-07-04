@@ -2,7 +2,6 @@ import express from "express";
 import SachModel from "../models/Sach/SachModel.js";
 
 const routerSach = express.Router();
-// const theloai = await TheloaiModel.find().populate("ten,img,id_theloai");
 
 // Kiểm tra sách trùng lặp theo tên
 routerSach.post("/check-duplicate", async (req, res, next) => {
@@ -23,7 +22,7 @@ routerSach.post("/check-duplicate", async (req, res, next) => {
 // Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {
-    const listSach = await SachModel.find().populate("theloai", "ten, img");
+    const listSach = await SachModel.find().populate("tacgia theloai");
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error(error);
@@ -35,7 +34,7 @@ routerSach.get("/list", async (req, res, next) => {
 routerSach.post("/add", async (req, res, next) => {
   try {
     const {
-      id_tacgia,
+      tacgia, // Đổi từ id_tacgia thành tacgia
       nxb,
       img,
       description,
@@ -54,7 +53,7 @@ routerSach.post("/add", async (req, res, next) => {
     } = req.body;
 
     const newSach = new SachModel({
-      id_tacgia,
+      tacgia, // Đổi từ id_tacgia thành tacgia
       nxb,
       img,
       description,
@@ -86,7 +85,7 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
     const {
-      id_tacgia,
+      tacgia, // Đổi từ id_tacgia thành tacgia
       nxb,
       img,
       description,
@@ -106,7 +105,7 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
     const updatedSach = await SachModel.findByIdAndUpdate(
       id_sach,
       {
-        id_tacgia,
+        tacgia, // Đổi từ id_tacgia thành tacgia
         nxb,
         img,
         description,

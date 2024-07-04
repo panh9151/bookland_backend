@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const TacgiaSchema = new Schema({
-  id_tacgia: {
-    type: Schema.Types.ObjectId,
-    ref: "TacGia",
-    unique: true,
-    required: true,
-  },
   ten: {
     type: String,
     required: true,
