@@ -3,7 +3,6 @@ import TheLoaiModel from "../models/TheLoai/TheLoaiModel.js";
 
 const routerTheLoai = express.Router();
 
-// Kiểm tra trùng lặp tên thể loại
 routerTheLoai.post("/check-duplicate", async (req, res, next) => {
   try {
     const { ten } = req.body;

@@ -5,12 +5,10 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerTheLoaiDetail = express.Router();
 
-// Lấy thông tin chi tiết của một thể loại và các sách thuộc thể loại đó
 routerTheLoaiDetail.get("/:id_theloai", async (req, res, next) => {
   try {
     const { id_theloai } = req.params;
 
-    // Tìm thông tin của thể loại
     const theLoai = await TheLoaiModel.findById(id_theloai);
     if (!theLoai) {
       return res
@@ -18,7 +16,6 @@ routerTheLoaiDetail.get("/:id_theloai", async (req, res, next) => {
         .json({ success: false, message: "Không tìm thấy thể loại" });
     }
 
-    // Tìm các sách thuộc thể loại đó
     const theLoaiSachDetails = await TheLoaiSachDetailModel.find({
       id_theloai,
     });

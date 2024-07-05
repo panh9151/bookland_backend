@@ -27,7 +27,21 @@ routerTacgia.get("/list", async function (req, res, next) {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
+routerTacgia.get("/:id", async function (req, res, next) {
+  try {
+    const { id } = req.params;
+    const tacgia = await TacgiaModel.findById(id);
 
+    if (!tacgia) {
+      return res.status(404).json({ message: "Không tìm thấy tác giả" });
+    }
+
+    res.json({ success: true, data: tacgia });
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin tác giả:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
 routerTacgia.post("/add", async function (req, res, next) {
   try {
     const { id_tacgia, ten, img, tieusu, is_active } = req.body;
