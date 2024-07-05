@@ -3,7 +3,6 @@ import UserModel from "../models/User/userModel.js";
 
 const routerUser = express.Router();
 
-// Kiểm tra tài khoản trùng lặp
 routerUser.post("/check-duplicate", async (req, res, next) => {
   try {
     const { ten } = req.body;
