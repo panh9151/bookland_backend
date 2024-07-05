@@ -9,9 +9,8 @@ import routerBanner from "./routes/Banner.js";
 import routerTheLoai from "./routes/TheLoai.js";
 import routerReview from "./routes/Review.js";
 import routerOrder from "./routes/Order.js";
-import routerVoucher from "./routes/Voucher.js";
-import routerSachDetail from "./routes/SachDetail.js";
 import routerTheLoaiDetail from "./routes/TheLoaiDetail.js";
+import routerAuth from "./routes/Auth.js";
 
 //app config
 const app = express();
@@ -29,7 +28,6 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api/add, routerSach");
-app.use("/api/sach-detail", routerSachDetail);
 app.use("/api/admin", routerAdmin);
 app.use("/api/user", routerUser);
 app.use("/api/sach", routerSach);
@@ -38,9 +36,8 @@ app.use("/api/banner", routerBanner);
 app.use("/api/theloai", routerTheLoai);
 app.use("/api/review", routerReview);
 app.use("/api/order", routerOrder);
-app.use("/api/voucher", routerVoucher);
-app.use("/theloai-detail", routerTheLoaiDetail);
-
+app.use("/api/theloai-detail", routerTheLoaiDetail);
+app.use("/api/auth", routerAuth);
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
 });

@@ -32,17 +32,8 @@ routerUser.get("/list", async function (req, res, next) {
 // Thêm người dùng bình thường
 routerUser.post("/add", async function (req, res, next) {
   try {
-    const {
-      id_user,
-      ten,
-      password,
-      email,
-      gioitinh,
-      avt,
-      sdt,
-      ngaytao,
-      loaitaikhoan,
-    } = req.body;
+    const { ten, password, email, gioitinh, avt, sdt, ngaytao, loaitaikhoan } =
+      req.body;
 
     if (loaitaikhoan !== 0) {
       return res
@@ -51,7 +42,6 @@ routerUser.post("/add", async function (req, res, next) {
     }
 
     const newUser = {
-      id_user,
       ten,
       password,
       email,
@@ -71,12 +61,14 @@ routerUser.post("/add", async function (req, res, next) {
 });
 
 // Sửa thông tin người dùng bình thường
-routerUser.put("/edit", async function (req, res, next) {
+routerUser.put("/edit/:id", async function (req, res, next) {
   try {
-    const { id_user, ten, email, password } = req.body;
-    var user = await UserModel.findById(id_user);
-    if (user && user.loaitaikhoan === 0) {
-      await UserModel.findByIdAndUpdate(id_user, { ten, email, password });
+    const { id } = req.params;
+    const { ten, email, password } = req.body;
+
+    const user = await UserModel.findById(id);
+    if (user && user.loaitaikhoan === "0") {
+      await UserModel.findByIdAndUpdate(id, { ten, email, password });
       res.json({ status: 1, message: "Sửa người dùng thành công" });
     } else {
       res.status(404).json({
@@ -86,6 +78,7 @@ routerUser.put("/edit", async function (req, res, next) {
       });
     }
   } catch (err) {
+    console.error(err);
     res.json({ status: 0, message: "Sửa người dùng thất bại" });
   }
 });

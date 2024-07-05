@@ -1,26 +1,28 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 const Schema = mongoose.Schema;
 
 const OrderDetailSchema = new Schema({
-  id_orderdetail: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  id_loaisach: {
-    type: String,
-    ref: "LoaiSach",
+  id_sach: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Sach",
     required: true,
   },
   id_order: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Order",
     required: true,
   },
-  price: { type: Number, required: true },
-  soluong: { type: Number, required: true }
+  price: {
+    type: Number,
+    required: true,
+  },
+  soluong: {
+    type: Number,
+    required: true,
+  },
 });
 
-module.exports =
-  mongoose.models.OrderDetail ||
-  mongoose.model("OrderDetail", OrderDetailSchema);
+const OrderDetailModel = mongoose.model("OrderDetail", OrderDetailSchema);
+
+export default OrderDetailModel;

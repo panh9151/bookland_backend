@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  id_user: { type: Schema.Types.ObjectId },
   loaitaikhoan: {
     type: Number,
     enum: [0, 1],
@@ -56,6 +55,14 @@ const UserSchema = new Schema({
     default: true,
     required: true,
   },
+});
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 const UserModel = mongoose.model("User", UserSchema);
