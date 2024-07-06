@@ -5,6 +5,41 @@ import Review from "../models/Review/ReviewModel.js";
 
 const routerReview = express.Router();
 
+routerReview.get("/list", async (req, res) => {
+  try {
+    const reviews = await Review.find({})
+      .populate("id_user", "ten")
+      .populate("id_sach", "ten");
+
+    res.json({ success: true, data: reviews });
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+routerReview.get("/sach/:id_sach", async (req, res) => {
+  try {
+    const { id_sach } = req.params;
+    const reviews = await Review.find({ id_sach, hien_thi: true }) // Tìm review của sách có id_sach và hien_thi là true
+      .populate("id_user", "ten") // Populate thông tin tên user
+      .populate("id_sach", "ten"); // Populate thông tin tên sách
+
+    if (!reviews.length) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Không tìm thấy review cho sách này",
+        });
+    }
+
+    res.json({ success: true, data: reviews });
+  } catch (error) {
+    console.error("Error fetching reviews for the book:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // POST: Tạo review mới
 routerReview.post("/add", async (req, res) => {
   try {
@@ -25,25 +60,10 @@ routerReview.post("/add", async (req, res) => {
   }
 });
 
-// GET: Lấy danh sách tất cả các review
-routerReview.get("/list", async (req, res) => {
-  try {
-    const reviews = await Review.find({})
-      .populate("id_user", "username") // Populate thông tin user chỉ lấy username
-      .populate("id_sach", "ten"); // Populate thông tin sách chỉ lấy tên sách
-
-    res.json({ success: true, data: reviews });
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
-
-// DELETE: Xóa review dựa trên id_review
 routerReview.delete("/:id_review", async (req, res) => {
   try {
-    const { id_review } = req.params;
-    const deletedReview = await Review.findByIdAndDelete(id_review);
+    const { id } = req.params;
+    const deletedReview = await Review.findByIdAndDelete(id);
 
     if (!deletedReview) {
       return res.json({ status: 0, message: "Không tìm thấy review để xóa" });

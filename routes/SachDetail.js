@@ -3,7 +3,6 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerSachDetail = express.Router();
 
-// Lấy thông tin một quyển sách theo ID
 routerSachDetail.get("/:id_sach", async (req, res, next) => {
   try {
     const { id_sach } = req.params;

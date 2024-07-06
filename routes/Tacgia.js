@@ -44,10 +44,10 @@ routerTacgia.get("/:id", async function (req, res, next) {
 });
 routerTacgia.post("/add", async function (req, res, next) {
   try {
-    const { id_tacgia, ten, img, tieusu, is_active } = req.body;
+    const { ten, img, tieusu, is_active } = req.body;
 
     // Kiểm tra xem id_tacgia đã tồn tại hay chưa
-    const existingTacgia = await TacgiaModel.findOne({ id_tacgia });
+    const existingTacgia = await TacgiaModel.findOne({ id });
     if (existingTacgia) {
       return res.json({
         status: 0,
@@ -56,7 +56,6 @@ routerTacgia.post("/add", async function (req, res, next) {
     }
 
     const newTacgia = {
-      id_tacgia,
       ten,
       img,
       tieusu,

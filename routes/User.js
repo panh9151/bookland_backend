@@ -31,8 +31,7 @@ routerUser.get("/list", async function (req, res, next) {
 // Thêm người dùng bình thường
 routerUser.post("/add", async function (req, res, next) {
   try {
-    const { ten, password, email, gioitinh, avt, sdt, ngaytao, loaitaikhoan } =
-      req.body;
+    const { ten, password, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
     if (loaitaikhoan !== 0) {
       return res
@@ -47,7 +46,6 @@ routerUser.post("/add", async function (req, res, next) {
       gioitinh,
       avt,
       sdt,
-      ngaytao,
       loaitaikhoan,
     };
 
