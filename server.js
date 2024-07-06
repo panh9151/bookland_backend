@@ -11,6 +11,7 @@ import routerReview from "./routes/Review.js";
 import routerOrder from "./routes/Order.js";
 import routerTheLoaiDetail from "./routes/TheLoaiDetail.js";
 import routerAuth from "./routes/Auth.js";
+import routerSachDetail from "./routes/SachDetail.js";
 
 //app config
 const app = express();
@@ -38,6 +39,7 @@ app.use("/api/review", routerReview);
 app.use("/api/order", routerOrder);
 app.use("/api/theloai-detail", routerTheLoaiDetail);
 app.use("/api/auth", routerAuth);
+app.use("/api/sach-detail", routerSachDetail);
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
 });

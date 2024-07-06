@@ -3,11 +3,6 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ReviewSchema = new Schema({
-  id_review: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   id_user: {
     type: Schema.Types.ObjectId,
     ref: "User",

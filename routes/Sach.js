@@ -3,6 +3,7 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerSach = express.Router();
 
+// Kiểm tra trùng lặp sách
 routerSach.post("/check-duplicate", async (req, res, next) => {
   try {
     const { ten } = req.body;
@@ -14,37 +15,25 @@ routerSach.post("/check-duplicate", async (req, res, next) => {
       return res.json({ exists: false });
     }
   } catch (error) {
-    return next(error);
-  }
-});
-routerSach.get("/:id_sach", async (req, res, next) => {
-  try {
-    const { id_sach } = req.params;
-    const sach = await SachModel.findById(id_sach).populate("tacgia theloai");
-
-    if (!sach) {
-      return res
-        .status(404)
-        .json({ status: 0, message: "Không tìm thấy sách" });
-    }
-
-    res.json({ status: 1, data: sach });
-  } catch (err) {
-    console.error("Lỗi khi lấy thông tin sách:", err);
-    res.status(500).json({ status: 0, message: "Lỗi khi lấy thông tin sách" });
+    console.error("Lỗi khi kiểm tra trùng lặp sách:", error);
+    res
+      .status(500)
+      .json({ status: 0, message: "Lỗi khi kiểm tra trùng lặp sách" });
   }
 });
 
+// Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {
     const listSach = await SachModel.find().populate("tacgia theloai");
     res.json({ success: true, data: listSach });
   } catch (error) {
-    console.error(error);
+    console.error("Lỗi khi lấy danh sách sách:", error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
+// Thêm sách mới
 routerSach.post("/add", async (req, res, next) => {
   try {
     const {
@@ -90,10 +79,11 @@ routerSach.post("/add", async (req, res, next) => {
     res.json({ status: 1, message: "Thêm sách thành công" });
   } catch (err) {
     console.error("Lỗi khi thêm sách:", err);
-    res.json({ status: 0, message: "Thêm sách thất bại" });
+    res.status(500).json({ status: 0, message: "Thêm sách thất bại" });
   }
 });
 
+// Sửa thông tin sách
 routerSach.put("/edit/:id_sach", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
@@ -113,6 +103,7 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
       sold,
       language,
       hien_thi,
+      theloai,
     } = req.body;
 
     const updatedSach = await SachModel.findByIdAndUpdate(
@@ -133,6 +124,7 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
         sold,
         language,
         hien_thi,
+        theloai,
       },
       { new: true }
     );
@@ -144,22 +136,32 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
         data: updatedSach,
       });
     } else {
-      res.json({ status: 0, message: "Không tìm thấy sách để sửa đổi" });
+      res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy sách để sửa đổi" });
     }
   } catch (err) {
     console.error("Lỗi khi sửa sách:", err);
-    res.json({ status: 0, message: "Sửa sách thất bại" });
+    res.status(500).json({ status: 0, message: "Sửa sách thất bại" });
   }
 });
 
+// Xóa sách
 routerSach.delete("/delete/:id_sach", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
-    await SachModel.findByIdAndDelete(id_sach);
-    res.json({ status: 1, message: "Xóa sách thành công" });
+    const sach = await SachModel.findByIdAndDelete(id_sach);
+
+    if (sach) {
+      res.json({ status: 1, message: "Xóa sách thành công" });
+    } else {
+      res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy sách để xóa" });
+    }
   } catch (err) {
     console.error("Lỗi khi xóa sách:", err);
-    res.json({ status: 0, message: "Xóa sách thất bại" });
+    res.status(500).json({ status: 0, message: "Xóa sách thất bại" });
   }
 });
 
