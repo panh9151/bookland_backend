@@ -18,9 +18,10 @@ routerBanner.post("/add", async (req, res) => {
       hien_thi,
     });
     await newBanner.save();
-    res.status(201).json(newBanner);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.json({ status: 1, message: "Thêm banner thành công" });
+  } catch (err) {
+    console.error("Lỗi khi thêm sách:", err);
+    res.status(500).json({ status: 0, message: "Thêm banner thất bại" });
   }
 });
 
@@ -66,8 +67,20 @@ routerBanner.get("/list", async (req, res) => {
       ngaybatdau: { $lte: currentDate },
       ngayketthuc: { $gte: currentDate },
       hien_thi: true,
-    });
+    }).sort({ uutien: 1 });
     res.status(200).json(banners);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+routerBanner.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const banner = await BannerModel.findById(id);
+    if (!banner) {
+      return res.status(404).json({ message: "Banner không tồn tại" });
+    }
+    res.status(200).json(banner);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

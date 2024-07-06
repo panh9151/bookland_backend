@@ -3,25 +3,6 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerSach = express.Router();
 
-// Kiểm tra trùng lặp sách
-routerSach.post("/check-duplicate", async (req, res, next) => {
-  try {
-    const { ten } = req.body;
-    const existingSach = await SachModel.findOne({ ten });
-
-    if (existingSach) {
-      return res.json({ exists: true });
-    } else {
-      return res.json({ exists: false });
-    }
-  } catch (error) {
-    console.error("Lỗi khi kiểm tra trùng lặp sách:", error);
-    res
-      .status(500)
-      .json({ status: 0, message: "Lỗi khi kiểm tra trùng lặp sách" });
-  }
-});
-
 // Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {
