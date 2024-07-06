@@ -73,6 +73,8 @@ routerBanner.get("/list", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+// Lấy 1 banner
+
 routerBanner.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {

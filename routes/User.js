@@ -3,20 +3,6 @@ import UserModel from "../models/User/userModel.js";
 
 const routerUser = express.Router();
 
-routerUser.post("/check-duplicate", async (req, res, next) => {
-  try {
-    const { ten } = req.body;
-    const existingUser = await UserModel.findOne({ ten });
-    if (existingUser) {
-      return res.json({ exists: true });
-    } else {
-      return res.json({ exists: false });
-    }
-  } catch (error) {
-    return next(error);
-  }
-});
-
 // Lấy danh sách người dùng bình thường
 routerUser.get("/list", async function (req, res, next) {
   try {

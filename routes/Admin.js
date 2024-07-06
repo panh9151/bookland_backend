@@ -2,8 +2,6 @@ import express from "express";
 import UserModel from "../models/User/userModel.js";
 
 const routerAdmin = express.Router();
-
-// Lấy danh sách admin
 routerAdmin.get("/list", async function (req, res, next) {
   try {
     const listAdmins = await UserModel.find({ loaitaikhoan: 1 });

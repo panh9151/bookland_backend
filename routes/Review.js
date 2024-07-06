@@ -20,17 +20,15 @@ routerReview.get("/list", async (req, res) => {
 routerReview.get("/sach/:id_sach", async (req, res) => {
   try {
     const { id_sach } = req.params;
-    const reviews = await Review.find({ id_sach, hien_thi: true }) // Tìm review của sách có id_sach và hien_thi là true
+    const reviews = await Review.find({ id_sach, hien_thi: true })
       .populate("id_user", "ten") // Populate thông tin tên user
       .populate("id_sach", "ten"); // Populate thông tin tên sách
 
     if (!reviews.length) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Không tìm thấy review cho sách này",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy review cho sách này",
+      });
     }
 
     res.json({ success: true, data: reviews });
@@ -39,8 +37,7 @@ routerReview.get("/sach/:id_sach", async (req, res) => {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
-
-// POST: Tạo review mới
+//  Tạo review mới
 routerReview.post("/add", async (req, res) => {
   try {
     const { id_user, id_sach, diem, txt } = req.body;
