@@ -15,8 +15,7 @@ routerAdmin.get("/list", async function (req, res, next) {
 // Thêm admin
 routerAdmin.post("/add", async function (req, res, next) {
   try {
-    const { ten, password, email, gioitinh, avt, sdt, ngaytao, loaitaikhoan } =
-      req.body;
+    const { ten, password, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
     if (loaitaikhoan !== 1) {
       return res
@@ -31,7 +30,6 @@ routerAdmin.post("/add", async function (req, res, next) {
       gioitinh,
       avt,
       sdt,
-      ngaytao,
       loaitaikhoan,
     };
 

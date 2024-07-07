@@ -31,8 +31,4 @@ routerAuth.post("/login", async (req, res) => {
   }
 });
 
-routerAuth.post("/logout", (req, res) => {
-  res.status(200).json({ message: "Đăng xuất thành công" });
-});
-
 export default routerAuth;
