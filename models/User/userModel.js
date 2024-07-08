@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import bcrypt from "bcryptjs";
+
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   loaitaikhoan: {
@@ -17,17 +19,16 @@ const UserSchema = new Schema({
     type: String,
     unique: true,
     required: true,
+    // You can add more specific validation if needed, e.g., match: /regex/
   },
   ten: {
     type: String,
   },
-
   gioitinh: {
     type: Number,
     enum: [0, 1],
     default: 0,
   },
-
   // 0 - Nam
   // 1 - Nữ
   avt: {
@@ -39,7 +40,6 @@ const UserSchema = new Schema({
   sdt: {
     type: Number,
   },
-
   ngaytao: {
     type: Date,
     default: Date.now,
@@ -56,16 +56,20 @@ const UserSchema = new Schema({
     required: true,
   },
 });
+
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 });
 
 const UserModel = mongoose.model("User", UserSchema);
-//const SachModel = mongoose.model("Sach", SachSchema);
+
 export default UserModel;
-// export default SachModel;

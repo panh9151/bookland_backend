@@ -3,30 +3,18 @@ import express from "express";
 
 const routerTacgia = express.Router();
 
-routerTacgia.post("/check-duplicate", async (req, res, next) => {
-  try {
-    const { ten } = req.body;
-    const existingTacgia = await TacgiaModel.findOne({ ten });
-
-    if (existingTacgia) {
-      return res.json({ exists: true });
-    } else {
-      return res.json({ exists: false });
-    }
-  } catch (error) {
-    return next(error);
-  }
-});
-
+// Lấy danh sách tác giả
 routerTacgia.get("/list", async function (req, res, next) {
   try {
     const listTacgia = await TacgiaModel.find({});
     res.json({ success: true, data: listTacgia });
   } catch (error) {
-    console.log(error);
+    console.error("Lỗi khi lấy danh sách tác giả:", error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
+
+// Lấy thông tin tác giả theo ID
 routerTacgia.get("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
@@ -42,28 +30,25 @@ routerTacgia.get("/:id", async function (req, res, next) {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
+
+// Thêm tác giả
 routerTacgia.post("/add", async function (req, res, next) {
   try {
     const { ten, img, tieusu, is_active } = req.body;
 
-    // Kiểm tra xem id_tacgia đã tồn tại hay chưa
-    const existingTacgia = await TacgiaModel.findOne({ id });
-    if (existingTacgia) {
-      return res.json({
-        status: 0,
-        message: "ID tác giả đã tồn tại",
-      });
-    }
-
-    const newTacgia = {
+    const newTacgia = new TacgiaModel({
       ten,
       img,
       tieusu,
       is_active,
-    };
-    await TacgiaModel.create(newTacgia);
+    });
+    await newTacgia.save();
 
-    res.json({ status: 1, message: "Thêm tác giả thành công" });
+    res.json({
+      status: 1,
+      message: "Thêm tác giả thành công",
+      data: newTacgia,
+    });
   } catch (err) {
     console.error("Error adding author:", err);
     res.json({
@@ -72,46 +57,59 @@ routerTacgia.post("/add", async function (req, res, next) {
       error: err.message,
     });
   }
-  const listTacgia = await TacgiaModel.find({});
 });
 
-routerTacgia.put("/edit", async function (req, res, next) {
+// Sửa tác giả
+routerTacgia.put("/edit/:id", async function (req, res, next) {
   try {
-    const { id_tacgia, ten, img, tieusu, is_active } = req.body;
-    var item = await TacgiaModel.findById(id_tacgia);
-    if (item) {
-      const updatedTacgia = await TacgiaModel.findByIdAndUpdate(
-        id_tacgia,
-        {
-          ten,
-          img,
-          tieusu,
-          is_active,
-        },
-        { new: true }
-      );
-      res.json({
-        status: 1,
-        message: "Sửa tác giả thành công",
-        data: updatedTacgia,
-      });
+    const { id } = req.params;
+    const { ten, img, tieusu, is_active } = req.body;
+
+    const updatedTacgia = await TacgiaModel.findByIdAndUpdate(
+      id,
+      {
+        ten,
+        img,
+        tieusu,
+        is_active,
+      },
+      { new: true }
+    );
+
+    if (!updatedTacgia) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy tác giả" });
     }
+
+    res.json({
+      status: 1,
+      message: "Sửa tác giả thành công",
+      data: updatedTacgia,
+    });
   } catch (err) {
     console.error("Error updating author:", err);
     res.json({ status: 0, message: "Sửa tác giả thất bại" });
   }
 });
 
-routerTacgia.delete("/:id", async function (req, res, next) {
+// Xóa tác giả
+routerTacgia.delete("/delete/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
 
-    await TacgiaModel.deleteOne({ _id: id });
-    const listTacgia = await TacgiaModel.find({});
-    res.json({ status: true, data: listTacgia });
+    const deletedTacgia = await TacgiaModel.findByIdAndDelete(id);
+
+    if (!deletedTacgia) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy tác giả" });
+    }
+
+    res.json({ status: 1, message: "Xóa tác giả thành công" });
   } catch (error) {
     console.error("Lỗi khi xóa tác giả:", error);
-    res.json({ status: false });
+    res.json({ status: 0, message: "Xóa tác giả thất bại" });
   }
 });
 
