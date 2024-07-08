@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const { Schema } = mongoose;
+function format(value) {
+  if (typeof value === "string") {
+    value = parseInt(value);
+  }
+  if (value.toString().length === 9) {
+    return "0" + value;
+  }
+  return value;
+}
 
 const UserSchema = new Schema({
   loaitaikhoan: {
@@ -39,6 +48,7 @@ const UserSchema = new Schema({
   },
   sdt: {
     type: Number,
+    set: format,
   },
   ngaytao: {
     type: Date,
