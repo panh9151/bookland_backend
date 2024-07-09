@@ -6,7 +6,11 @@ const routerSach = express.Router();
 // Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {
-    const listSach = await SachModel.find().populate("tacgia theloai");
+    const listSach = await SachModel.find()
+      .populate("tacgia", "ten")
+      .populate("theloai", "ten");
+
+    // ("tacgia theloai");
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sách:", error);
