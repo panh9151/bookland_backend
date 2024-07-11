@@ -1,13 +1,13 @@
 import express from "express";
-import UserModel from "../models/User/userModel.js";
+import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
 
-const routerUser = express.Router();
+const routerNguoiDung = express.Router();
 
 // Lấy danh sách người dùng bình thường
-routerUser.get("/list", async function (req, res, next) {
+routerNguoiDung.get("/list", async function (req, res, next) {
   try {
-    const listUsers = await UserModel.find({ loaitaikhoan: 0 });
-    res.json({ success: true, data: listUsers });
+    const listNguoiDungs = await NguoiDungModel.find({ loaitaikhoan: 0 });
+    res.json({ success: true, data: listNguoiDungs });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -15,9 +15,9 @@ routerUser.get("/list", async function (req, res, next) {
 });
 
 // Thêm người dùng bình thường
-routerUser.post("/add", async function (req, res, next) {
+routerNguoiDung.post("/add", async function (req, res, next) {
   try {
-    const { ten, password, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
+    const { ten, matkhau, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
     if (loaitaikhoan !== 0) {
       return res
@@ -25,9 +25,9 @@ routerUser.post("/add", async function (req, res, next) {
         .json({ status: 0, message: "Loại tài khoản phải là người dùng" });
     }
 
-    const newUser = {
+    const newNguoiDung = {
       ten,
-      password,
+      matkhau,
       email,
       gioitinh,
       avt,
@@ -35,7 +35,7 @@ routerUser.post("/add", async function (req, res, next) {
       loaitaikhoan,
     };
 
-    await UserModel.create(newUser);
+    await NguoiDungModel.create(newNguoiDung);
     res.json({ status: 1, message: "Thêm người dùng thành công" });
   } catch (err) {
     console.error("Lỗi khi thêm người dùng:", err);
@@ -44,14 +44,14 @@ routerUser.post("/add", async function (req, res, next) {
 });
 
 // Sửa thông tin người dùng bình thường
-routerUser.put("/edit/:id", async function (req, res, next) {
+routerNguoiDung.put("/edit/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
-    const { ten, email, password } = req.body;
+    const { ten, email, matkhau } = req.body;
 
-    const user = await UserModel.findById(id);
-    if (user && user.loaitaikhoan === "0") {
-      await UserModel.findByIdAndUpdate(id, { ten, email, password });
+    const NguoiDung = await NguoiDungModel.findById(id);
+    if (NguoiDung && NguoiDung.loaitaikhoan === "0") {
+      await NguoiDungModel.findByIdAndUpdate(id, { ten, email, matkhau });
       res.json({ status: 1, message: "Sửa người dùng thành công" });
     } else {
       res.status(404).json({
@@ -67,12 +67,12 @@ routerUser.put("/edit/:id", async function (req, res, next) {
 });
 
 // Xóa người dùng bình thường
-routerUser.delete("/:id", async function (req, res, next) {
+routerNguoiDung.delete("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
-    const user = await UserModel.findById(id);
+    const NguoiDung = await NguoiDungModel.findById(id);
 
-    if (!user || user.loaitaikhoan !== 0) {
+    if (!NguoiDung || NguoiDung.loaitaikhoan !== 0) {
       return res.status(404).json({
         status: false,
         message:
@@ -80,7 +80,7 @@ routerUser.delete("/:id", async function (req, res, next) {
       });
     }
 
-    await UserModel.deleteOne({ _id: id });
+    await NguoiDungModel.deleteOne({ _id: id });
     res.json({ status: true, message: "Xóa người dùng thành công" });
   } catch (error) {
     console.error("Lỗi khi xóa người dùng:", error);
@@ -88,4 +88,4 @@ routerUser.delete("/:id", async function (req, res, next) {
   }
 });
 
-export default routerUser;
+export default routerNguoiDung;

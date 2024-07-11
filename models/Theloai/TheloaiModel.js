@@ -9,7 +9,7 @@ const TheLoaiSchema = new Schema({
     unique: true,
   },
   img: String,
-  is_active: {
+  id_hienthi: {
     type: Boolean,
     default: true,
     required: true,

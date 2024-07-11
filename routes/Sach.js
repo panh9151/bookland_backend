@@ -25,16 +25,16 @@ routerSach.post("/add", async (req, res, next) => {
       tacgia,
       nxb,
       img,
-      description,
+      mota,
       ngayxuatban,
       isRecommended,
       ten,
-      view,
-      price,
+      luotxem,
+      gia,
       recomendedPriority,
       star,
-      sold,
-      language,
+      giacu,
+      ngonngu,
       hien_thi,
       theloai,
     } = req.body;
@@ -43,16 +43,16 @@ routerSach.post("/add", async (req, res, next) => {
       tacgia,
       nxb,
       img,
-      description,
+      mota,
       ngayxuatban,
       isRecommended,
       ten,
-      view,
-      price,
+      luotxem,
+      gia,
       recomendedPriority,
       star,
-      sold,
-      language,
+      giacu,
+      ngonngu,
       hien_thi,
       theloai,
     });
@@ -67,23 +67,23 @@ routerSach.post("/add", async (req, res, next) => {
 });
 
 // Sửa thông tin sách
-routerSach.put("/edit/:id_sach", async (req, res, next) => {
+routerSach.put("/edit/:id", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
     const {
       tacgia,
       nxb,
       img,
-      description,
+      mota,
       ngayxuatban,
       isRecommended,
       ten,
-      view,
-      price,
+      luotxem,
+      gia,
       recomendedPriority,
       star,
-      sold,
-      language,
+      giacu,
+      ngonngu,
       hien_thi,
       theloai,
     } = req.body;
@@ -94,16 +94,16 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
         tacgia,
         nxb,
         img,
-        description,
+        mota,
         ngayxuatban,
         isRecommended,
         ten,
-        view,
-        price,
+        luotxem,
+        gia,
         recomendedPriority,
         star,
-        sold,
-        language,
+        giacu,
+        ngonngu,
         hien_thi,
         theloai,
       },
@@ -128,7 +128,7 @@ routerSach.put("/edit/:id_sach", async (req, res, next) => {
 });
 
 // Xóa sách
-routerSach.delete("/delete/:id_sach", async (req, res, next) => {
+routerSach.delete("/delete/:id", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
     const sach = await SachModel.findByIdAndDelete(id_sach);

@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const OrderDetailSchema = new Schema({
+const ChiTietHoaDonSchema = new Schema({
   id_sach: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sach",
     required: true,
   },
-  id_order: {
+  id_hoadon: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Order",
     required: true,
@@ -23,6 +23,6 @@ const OrderDetailSchema = new Schema({
   },
 });
 
-const OrderDetailModel = mongoose.model("OrderDetail", OrderDetailSchema);
+const ChiTietHoaDonModel = mongoose.model("ChiTietHoaDon", ChiTietHoaDonSchema);
 
-export default OrderDetailModel;
+export default ChiTietHoaDonModel;

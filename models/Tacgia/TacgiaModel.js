@@ -12,7 +12,7 @@ const TacgiaSchema = new Schema({
   tieusu: {
     type: String,
   },
-  is_active: {
+  id_hienthi: {
     type: Boolean,
     default: true,
     required: true,

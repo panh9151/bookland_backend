@@ -5,7 +5,7 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerTheLoaiDetail = express.Router();
 
-routerTheLoaiDetail.get("/:id_theloai", async (req, res, next) => {
+routerTheLoaiDetail.get("/:id", async (req, res, next) => {
   try {
     const { id_theloai } = req.params;
 

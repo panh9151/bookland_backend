@@ -34,13 +34,13 @@ routerTacgia.get("/:id", async function (req, res, next) {
 // Thêm tác giả
 routerTacgia.post("/add", async function (req, res, next) {
   try {
-    const { ten, img, tieusu, is_active } = req.body;
+    const { ten, img, tieusu, id_hienthi } = req.body;
 
     const newTacgia = new TacgiaModel({
       ten,
       img,
       tieusu,
-      is_active,
+      id_hienthi,
     });
     await newTacgia.save();
 
@@ -63,7 +63,7 @@ routerTacgia.post("/add", async function (req, res, next) {
 routerTacgia.put("/edit/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
-    const { ten, img, tieusu, is_active } = req.body;
+    const { ten, img, tieusu, id_hienthi } = req.body;
 
     const updatedTacgia = await TacgiaModel.findByIdAndUpdate(
       id,
@@ -71,7 +71,7 @@ routerTacgia.put("/edit/:id", async function (req, res, next) {
         ten,
         img,
         tieusu,
-        is_active,
+        id_hienthi,
       },
       { new: true }
     );

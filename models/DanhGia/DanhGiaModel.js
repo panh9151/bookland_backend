@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ReviewSchema = new Schema({
-  id_user: {
+const DanhGiaSchema = new Schema({
+  id_nguoidung: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -29,6 +29,6 @@ const ReviewSchema = new Schema({
   },
 });
 
-const Review = mongoose.model("Review", ReviewSchema);
+const DanhGia = mongoose.model("DanhGia", DanhGiaSchema);
 
-export default Review;
+export default DanhGia;

@@ -5,11 +5,9 @@ const routerBanner = express.Router();
 
 // Thêm banner
 routerBanner.post("/add", async (req, res) => {
-  const { id_banner, url, image, ngaybatdau, ngayketthuc, uutien, hien_thi } =
-    req.body;
+  const { url, image, ngaybatdau, ngayketthuc, uutien, hien_thi } = req.body;
   try {
     const newBanner = new BannerModel({
-      id_banner,
       url,
       image,
       ngaybatdau,

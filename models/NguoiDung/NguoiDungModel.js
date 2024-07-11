@@ -12,15 +12,15 @@ function format(value) {
   return value;
 }
 
-const UserSchema = new Schema({
+const NguoiDungSchema = new Schema({
   loaitaikhoan: {
     type: Number,
     enum: [0, 1],
     default: 0,
   },
-  // 0 - User
+  // 0 - NguoiDung
   // 1 - Admin
-  password: {
+  matkhau: {
     type: String,
     required: true,
   },
@@ -60,26 +60,26 @@ const UserSchema = new Schema({
   id_facebook: {
     type: String,
   },
-  is_active: {
+  id_hienthi: {
     type: Boolean,
     default: true,
     required: true,
   },
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+NguoiDungSchema.pre("save", async function (next) {
+  if (!this.isModified("matkhau")) {
     return next();
   }
   try {
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    this.matkhau = await bcrypt.hash(this.matkhau, salt);
     return next();
   } catch (err) {
     return next(err);
   }
 });
 
-const UserModel = mongoose.model("User", UserSchema);
+const NguoiDungModel = mongoose.model("NguoiDung", NguoiDungSchema);
 
-export default UserModel;
+export default NguoiDungModel;

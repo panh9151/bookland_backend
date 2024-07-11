@@ -1,81 +1,81 @@
 import express from "express";
-import OrderModel from "../models/Order/OrderModel.js";
+import DonHangModel from "../models/DonHang/DonHangModel.js";
 
-const routerOrder = express.Router();
+const routerDonHang = express.Router();
 
 // Tạo đơn hàng mới
-routerOrder.post("/add", async (req, res) => {
+routerDonHang.post("/add", async (req, res) => {
   const {
-    id_user,
+    id_nguoidung,
     diachi,
     sdt,
     nguoinhan,
     phuongthucthanhtoan,
     ghichu,
-    order_date,
+    ngaydathang,
     status,
     thanhtoan,
   } = req.body;
   try {
-    const newOrder = new OrderModel({
-      id_user,
+    const newDonHang = new DonHangModel({
+      id_nguoidung,
       diachi,
       sdt,
       nguoinhan,
       phuongthucthanhtoan,
       ghichu,
-      order_date,
+      ngaydathang,
       status,
       thanhtoan,
     });
-    await newOrder.save();
-    res.status(201).json(newOrder);
+    await newDonHang.save();
+    res.status(201).json(newDonHang);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
 // Cập nhật trạng thái đơn hàng
-routerOrder.put("/status/:id", async (req, res) => {
+routerDonHang.put("/status/:id", async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   try {
-    const updatedOrder = await OrderModel.findByIdAndUpdate(
+    const updatedDonHang = await DonHangModel.findByIdAndUpdate(
       id,
       { status },
       { new: true }
     );
-    if (!updatedOrder) {
+    if (!updatedDonHang) {
       return res.status(404).json({ message: "Đơn hàng không tồn tại" });
     }
-    res.status(200).json(updatedOrder);
+    res.status(200).json(updatedDonHang);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
 // Lấy thông tin đơn hàng
-routerOrder.get("/:id", async (req, res) => {
+routerDonHang.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const order = await OrderModel.findById(id);
-    if (!order) {
+    const DonHang = await DonHangModel.findById(id);
+    if (!DonHang) {
       return res.status(404).json({ message: "Đơn hàng không tồn tại" });
     }
-    res.status(200).json(order);
+    res.status(200).json(DonHang);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
 // Lấy danh sách tất cả đơn hàng
-routerOrder.get("/list", async (req, res) => {
+routerDonHang.get("/list", async (req, res) => {
   try {
-    const orders = await OrderModel.find();
-    res.status(200).json(orders);
+    const DonHangs = await DonHangModel.find();
+    res.status(200).json(DonHangs);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-export default routerOrder;
+export default routerDonHang;

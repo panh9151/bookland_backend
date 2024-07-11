@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const FavoritebookSchema = new Schema({
-  id_user: {
+const SachYeuThichSchema = new Schema({
+  id_nguoidung: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
@@ -20,6 +20,6 @@ const FavoritebookSchema = new Schema({
   },
 });
 
-const FavoritebookModel = mongoose.model("Favoritebook", FavoritebookSchema);
+const SachYeuThichModel = mongoose.model("SachYeuThich", SachYeuThichSchema);
 
-export default FavoritebookModel;
+export default SachYeuThichModel;

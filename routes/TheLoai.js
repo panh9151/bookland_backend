@@ -3,21 +3,6 @@ import TheLoaiModel from "../models/TheLoai/TheLoaiModel.js";
 
 const routerTheLoai = express.Router();
 
-routerTheLoai.post("/check-duplicate", async (req, res, next) => {
-  try {
-    const { ten } = req.body;
-    if (!ten) {
-      return res.status(400).json({ error: "Tên thể loại là bắt buộc" });
-    }
-
-    const existingTheLoai = await TheLoaiModel.findOne({ ten });
-
-    return res.json({ exists: !!existingTheLoai });
-  } catch (error) {
-    return next(error);
-  }
-});
-
 // Liệt kê tất cả thể loại
 routerTheLoai.get("/list", async (req, res, next) => {
   try {
@@ -32,7 +17,7 @@ routerTheLoai.get("/list", async (req, res, next) => {
 // Thêm thể loại mới
 routerTheLoai.post("/add", async (req, res, next) => {
   try {
-    const { id_theloai, ten, img, is_active } = req.body;
+    const { id_theloai, ten, img, id_hienthi } = req.body;
     if (!id_theloai || !ten) {
       return res.status(400).json({
         status: 0,
@@ -44,7 +29,7 @@ routerTheLoai.post("/add", async (req, res, next) => {
       id_theloai,
       ten,
       img,
-      is_active,
+      id_hienthi,
     };
     await TheLoaiModel.create(newTheLoai);
 
@@ -54,12 +39,12 @@ routerTheLoai.post("/add", async (req, res, next) => {
     res.status(500).json({ status: 0, message: "Thêm thể loại thất bại" });
   }
 });
-routerTheLoai.put("/edit/:id_theloai", async (req, res, next) => {
+routerTheLoai.put("/edit/:id", async (req, res, next) => {
   try {
     let { id_theloai } = req.params;
     id_theloai = id_theloai.replace(":", ""); // Loại bỏ ký tự ":"
 
-    const { ten, img, is_active } = req.body;
+    const { ten, img, id_hienthi } = req.body;
 
     // Kiểm tra id_theloai
     if (!id_theloai) {
@@ -79,7 +64,7 @@ routerTheLoai.put("/edit/:id_theloai", async (req, res, next) => {
     // Cập nhật thông tin thể loại
     const updatedTheLoai = await TheLoaiModel.findByIdAndUpdate(
       id_theloai,
-      { ten, img, is_active },
+      { ten, img, id_hienthi },
       { new: true } // Trả về document đã cập nhật
     );
 
@@ -125,3 +110,5 @@ routerTheLoai.delete("/del/:_id", async (req, res, next) => {
 });
 
 export default routerTheLoai;
+
+//:_id

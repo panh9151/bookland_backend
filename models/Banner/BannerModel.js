@@ -11,7 +11,7 @@ const BannerSchema = new Schema({
     type: String,
     required: true,
   },
-  view: {
+  luotclick: {
     type: Number,
     default: 0,
     required: true,

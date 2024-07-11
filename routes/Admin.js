@@ -1,5 +1,5 @@
 import express from "express";
-import UserModel from "../models/User/userModel.js";
+import UserModel from "../models/NguoiDung/NguoiDungModel.js";
 
 const routerAdmin = express.Router();
 routerAdmin.get("/list", async function (req, res, next) {
@@ -15,7 +15,7 @@ routerAdmin.get("/list", async function (req, res, next) {
 // Thêm admin
 routerAdmin.post("/add", async function (req, res, next) {
   try {
-    const { ten, password, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
+    const { ten, matkhau, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
     if (loaitaikhoan !== 1) {
       return res
@@ -25,7 +25,7 @@ routerAdmin.post("/add", async function (req, res, next) {
 
     const newAdmin = {
       ten,
-      password,
+      matkhau,
       email,
       gioitinh,
       avt,
@@ -44,10 +44,10 @@ routerAdmin.post("/add", async function (req, res, next) {
 // Sửa thông tin admin
 routerAdmin.put("/edit", async function (req, res, next) {
   try {
-    const { id_user, ten, email, password } = req.body;
-    const user = await UserModel.findById(id_user);
+    const { id_nguoidung, ten, email, matkhau } = req.body;
+    const user = await UserModel.findById(id_nguoidung);
     if (user && user.loaitaikhoan === 1) {
-      await UserModel.findByIdAndUpdate(id_user, { ten, email, password });
+      await UserModel.findByIdAndUpdate(id_nguoidung, { ten, email, matkhau });
       res.json({ status: 1, message: "Sửa admin thành công" });
     } else {
       res.status(404).json({

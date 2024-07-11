@@ -3,7 +3,7 @@ import SachModel from "../models/Sach/SachModel.js";
 
 const routerSachDetail = express.Router();
 
-routerSachDetail.get("/:id_sach", async (req, res, next) => {
+routerSachDetail.get("/:id", async (req, res, next) => {
   try {
     const { id_sach } = req.params;
     const sach = await SachModel.findById(id_sach).populate("tacgia theloai");
