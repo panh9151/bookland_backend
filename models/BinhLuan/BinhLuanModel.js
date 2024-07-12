@@ -6,12 +6,12 @@ const BinhLuanSchema = new Schema({
   id_blog: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Blog",
+    ref: "BaiViet",
   },
   id_nguoidung: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: "NguoiDung",
   },
   noidung: {
     type: String,

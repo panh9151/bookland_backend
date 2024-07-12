@@ -1,10 +1,10 @@
 import express from "express";
-import UserModel from "../models/NguoiDung/NguoiDungModel.js";
+import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
 
 const routerAdmin = express.Router();
 routerAdmin.get("/list", async function (req, res, next) {
   try {
-    const listAdmins = await UserModel.find({ loaitaikhoan: 1 });
+    const listAdmins = await NguoiDungModel.find({ loaitaikhoan: 1 });
     res.json({ success: true, data: listAdmins });
   } catch (error) {
     console.log(error);
@@ -33,7 +33,7 @@ routerAdmin.post("/add", async function (req, res, next) {
       loaitaikhoan,
     };
 
-    await UserModel.create(newAdmin);
+    await NguoiDungModel.create(newAdmin);
     res.json({ status: 1, message: "Thêm admin thành công" });
   } catch (err) {
     console.error("Lỗi khi thêm admin:", err);
@@ -45,9 +45,13 @@ routerAdmin.post("/add", async function (req, res, next) {
 routerAdmin.put("/edit", async function (req, res, next) {
   try {
     const { id_nguoidung, ten, email, matkhau } = req.body;
-    const user = await UserModel.findById(id_nguoidung);
-    if (user && user.loaitaikhoan === 1) {
-      await UserModel.findByIdAndUpdate(id_nguoidung, { ten, email, matkhau });
+    const NguoiDung = await NguoiDungModel.findById(id_nguoidung);
+    if (NguoiDung && NguoiDung.loaitaikhoan === 1) {
+      await NguoiDungModel.findByIdAndUpdate(id_nguoidung, {
+        ten,
+        email,
+        matkhau,
+      });
       res.json({ status: 1, message: "Sửa admin thành công" });
     } else {
       res.status(404).json({
@@ -64,16 +68,16 @@ routerAdmin.put("/edit", async function (req, res, next) {
 routerAdmin.delete("/delete/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
-    const user = await UserModel.findById(id);
+    const NguoiDung = await NguoiDungModel.findById(id);
 
-    if (!user || user.loaitaikhoan !== 1) {
+    if (!NguoiDung || NguoiDung.loaitaikhoan !== 1) {
       return res.status(404).json({
         status: false,
         message: "Admin không tồn tại hoặc không phải admin",
       });
     }
 
-    await UserModel.deleteOne({ _id: id });
+    await NguoiDungModel.deleteOne({ _id: id });
     res.json({ status: true, message: "Xóa admin thành công" });
   } catch (error) {
     console.error("Lỗi khi xóa admin:", error);

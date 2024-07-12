@@ -6,7 +6,7 @@ const SachYeuThichSchema = new Schema({
   id_nguoidung: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: "NguoiDung",
   },
   id_sach: {
     type: mongoose.Schema.Types.ObjectId,

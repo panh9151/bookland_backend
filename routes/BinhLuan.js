@@ -1,5 +1,5 @@
 import express from "express";
-import BinhLuanModel from "../models/BinhLuanModel.js";
+import BinhLuanModel from "../models/BinhLuan/BinhLuanModel.js";
 
 const routerBinhLuan = express.Router();
 

@@ -10,7 +10,7 @@ const BaiVietSchema = new Schema({
   },
   id_nguoidung: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "NguoiDung",
     required: true,
   },
   img: {

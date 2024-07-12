@@ -1,5 +1,5 @@
 import express from "express";
-import ChiTietHoaDonModel from "../models/ChiTietHoaDonModel.js";
+import ChiTietHoaDonModel from "../models/ChiTietHoaDon/ChiTietHoaDonModel.js";
 
 const routerChiTietHoaDon = express.Router();
 
@@ -54,12 +54,10 @@ routerChiTietHoaDon.delete("/:id", async (req, res, next) => {
     const deletedDetail = await ChiTietHoaDonModel.findByIdAndDelete(id);
 
     if (!deletedDetail) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Không tìm thấy chi tiết hóa đơn để xóa",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy chi tiết hóa đơn để xóa",
+      });
     }
 
     res.json({ success: true, message: "Xóa chi tiết hóa đơn thành công" });

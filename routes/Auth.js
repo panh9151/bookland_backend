@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/NguoiDung/NguoiDungModel.js"; // Giả sử UserModel được xuất đúng từ tệp này
+import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js"; // Giả sử NguoiDungModel được xuất đúng từ tệp này
 const routerAuth = express.Router();
 
 routerAuth.post("/login", async (req, res) => {
@@ -9,20 +9,20 @@ routerAuth.post("/login", async (req, res) => {
 
   try {
     // Tìm người dùng bằng email
-    const user = await UserModel.findOne({ email });
-    if (!user) {
+    const NguoiDung = await NguoiDungModel.findOne({ email });
+    if (!NguoiDung) {
       return res.status(400).json({ message: "Người dùng không tồn tại" });
     }
 
     // Kiểm tra mật khẩu
-    const isMatch = await bcrypt.compare(matkhau, user.matkhau);
+    const isMatch = await bcrypt.compare(matkhau, NguoiDung.matkhau);
     if (!isMatch) {
       return res.status(400).json({ message: "Sai mật khẩu" });
     }
 
     // Sinh token JWT
     const token = jwt.sign(
-      { userId: user._id, loaitaikhoan: user.loaitaikhoan },
+      { NguoiDungId: NguoiDung._id, loaitaikhoan: NguoiDung.loaitaikhoan },
       "your_jwt_secret",
       { expiresIn: "1h" }
     );

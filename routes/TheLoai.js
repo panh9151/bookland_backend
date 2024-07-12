@@ -1,5 +1,5 @@
 import express from "express";
-import TheLoaiModel from "../models/TheLoai/TheLoaiModel.js";
+import TheLoaiModel from "../models/Theloai/TheLoaiSachModel.js";
 
 const routerTheLoai = express.Router();
 
