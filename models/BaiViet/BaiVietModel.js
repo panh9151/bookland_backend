@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const BaiVietSchema = new Schema({
-  id_theloaibaiviet: {
+  theloaibaiviet: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "TheLoaiBaiViet",
     required: true,
   },
-  id_nguoidung: {
+  nguoidung: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "NguoiDung",
     required: true,

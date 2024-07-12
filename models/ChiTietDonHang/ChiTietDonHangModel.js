@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ChiTietHoaDonSchema = new Schema({
+const ChiTietDonHangSchema = new Schema({
   id_sach: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sach",
@@ -23,6 +23,9 @@ const ChiTietHoaDonSchema = new Schema({
   },
 });
 
-const ChiTietHoaDonModel = mongoose.model("ChiTietHoaDon", ChiTietHoaDonSchema);
+const ChiTietDonHangModel = mongoose.model(
+  "ChiTietDonHang",
+  ChiTietDonHangSchema
+);
 
-export default ChiTietHoaDonModel;
+export default ChiTietDonHangModel;

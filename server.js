@@ -9,12 +9,13 @@ import routerTacgia from "./routes/Tacgia.js";
 import routerBanner from "./routes/Banner.js";
 import routerDanhGia from "./routes/DanhGia.js";
 import routerDonHang from "./routes/DonHang.js";
-import routerTheLoai from "./routes/TheLoai.js";
+import routerTheLoaiSach from "./routes/TheLoaiSach.js";
 import routerTheLoaiDetail from "./routes/TheLoaiDetail.js";
 import routerAuth from "./routes/Auth.js";
 import routerBaiViet from "./routes/BaiViet.js";
 import routerBinhLuan from "./routes/BinhLuan.js";
-import routerChiTietHoaDon from "./routes/ChiTietHoaDon.js";
+import routerChiTietDonHang from "./routes/ChiTietDonHang.js";
+import routerTheLoaiBaiViet from "./routes/TheLoaiBaiViet.js";
 
 //app config
 const app = express();
@@ -40,12 +41,13 @@ app.use("/api/tacgia", routerTacgia);
 app.use("/api/banner", routerBanner);
 app.use("/api/danhgia", routerDanhGia);
 app.use("/api/donhang", routerDonHang);
-app.use("/api/theloai", routerTheLoai);
+app.use("/api/theloai", routerTheLoaiSach);
 app.use("/api/chitiettheloai", routerTheLoaiDetail);
 app.use("/api/auth", routerAuth);
 app.use("/api/baiviet", routerBaiViet);
 app.use("/api/binhluan", routerBinhLuan);
-app.use("/api/chitiethoadon", routerChiTietHoaDon);
+app.use("/api/chitietdonhang", routerChiTietDonHang);
+app.use("/api/theloaibaiviet", routerTheLoaiBaiViet);
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

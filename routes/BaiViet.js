@@ -7,8 +7,8 @@ const routerBaiViet = express.Router();
 routerBaiViet.get("/list", async (req, res, next) => {
   try {
     const listBaiViet = await BaiVietModel.find()
-      .populate("id_theloaiBaiViet", "ten")
-      .populate("id_nguoidung", "ten");
+      .populate("TheLoaiBaiViet", "ten")
+      .populate("NguoiDung", "ten");
     res.json({ success: true, data: listBaiViet });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bài viết:", error);
@@ -20,6 +20,8 @@ routerBaiViet.get("/list", async (req, res, next) => {
 routerBaiViet.post("/add", async (req, res, next) => {
   try {
     const {
+      TheLoaiBaiViet,
+      NguoiDung,
       img,
       ngaycapnhat,
       ngaytao,
@@ -31,6 +33,8 @@ routerBaiViet.post("/add", async (req, res, next) => {
     } = req.body;
 
     const newBaiViet = new BaiVietModel({
+      TheLoaiBaiViet,
+      NguoiDung,
       img,
       ngaycapnhat,
       ngaytao,
@@ -55,6 +59,8 @@ routerBaiViet.put("/edit/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
+      TheLoaiBaiViet,
+      NguoiDung,
       img,
       ngaycapnhat,
       ngaytao,
@@ -68,6 +74,8 @@ routerBaiViet.put("/edit/:id", async (req, res, next) => {
     const updatedBaiViet = await BaiVietModel.findByIdAndUpdate(
       id,
       {
+        TheLoaiBaiViet,
+        NguoiDung,
         img,
         ngaycapnhat,
         ngaytao,

@@ -1,5 +1,5 @@
 import express from "express";
-import TheLoaiBaiVietModel from "../models/TheLoaiBaiVietModel.js";
+import TheLoaiBaiVietModel from "../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js";
 
 const routerTheLoaiBaiViet = express.Router();
 
@@ -41,12 +41,10 @@ routerTheLoaiBaiViet.put("/edit/:id_theloaiblog", async (req, res) => {
         data: updatedTheLoaiBaiViet,
       });
     } else {
-      res
-        .status(404)
-        .json({
-          status: 0,
-          message: "Không tìm thấy thể loại bài viết để sửa đổi",
-        });
+      res.status(404).json({
+        status: 0,
+        message: "Không tìm thấy thể loại bài viết để sửa đổi",
+      });
     }
   } catch (error) {
     console.error("Lỗi khi sửa thể loại bài viết:", error);
@@ -67,12 +65,10 @@ routerTheLoaiBaiViet.delete("/delete/:id_theloaiblog", async (req, res) => {
     if (deletedTheLoaiBaiViet) {
       res.json({ status: 1, message: "Xóa thể loại bài viết thành công" });
     } else {
-      res
-        .status(404)
-        .json({
-          status: 0,
-          message: "Không tìm thấy thể loại bài viết để xóa",
-        });
+      res.status(404).json({
+        status: 0,
+        message: "Không tìm thấy thể loại bài viết để xóa",
+      });
     }
   } catch (error) {
     console.error("Lỗi khi xóa thể loại bài viết:", error);

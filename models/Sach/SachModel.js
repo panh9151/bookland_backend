@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const SachSchema = new Schema({
   tacgia: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Tacgia",
+    ref: "Tacgia", // Tên của model mà 'tacgia' tham chiếu đến
     required: true,
   },
   nxb: { type: String },
@@ -17,10 +17,10 @@ const SachSchema = new Schema({
   gia: { type: Number, required: true },
   giacu: { type: Number, default: 0, required: true },
   ngonngu: { type: String },
-  theloai: [
+  theloaisach: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "TheLoai",
+      ref: "TheLoaiSach", // Tên của model mà 'theloaisach' tham chiếu đến
       required: true,
     },
   ],

@@ -1,13 +1,13 @@
 import express from "express";
-import ChiTietHoaDonModel from "../models/ChiTietHoaDon/ChiTietHoaDonModel.js";
+import ChiTietDonHangModel from "../models/ChiTietDonHang/ChiTietDonHangModel.js";
 
-const routerChiTietHoaDon = express.Router();
+const routerChiTietDonHang = express.Router();
 
 // Lấy chi tiết hóa đơn theo id hóa đơn
-routerChiTietHoaDon.get("/:id_hoadon", async (req, res, next) => {
+routerChiTietDonHang.get("/:id_hoadon", async (req, res, next) => {
   try {
     const { id_hoadon } = req.params;
-    const details = await ChiTietHoaDonModel.find({ id_hoadon })
+    const details = await ChiTietDonHangModel.find({ id_hoadon })
       .populate("id_sach", "ten gia")
       .exec();
 
@@ -25,11 +25,11 @@ routerChiTietHoaDon.get("/:id_hoadon", async (req, res, next) => {
 });
 
 // Thêm chi tiết hóa đơn mới
-routerChiTietHoaDon.post("/add", async (req, res, next) => {
+routerChiTietDonHang.post("/add", async (req, res, next) => {
   try {
     const { id_sach, id_hoadon, price, soluong } = req.body;
 
-    const newDetail = new ChiTietHoaDonModel({
+    const newDetail = new ChiTietDonHangModel({
       id_sach,
       id_hoadon,
       price,
@@ -48,10 +48,10 @@ routerChiTietHoaDon.post("/add", async (req, res, next) => {
 });
 
 // Xóa chi tiết hóa đơn
-routerChiTietHoaDon.delete("/:id", async (req, res, next) => {
+routerChiTietDonHang.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deletedDetail = await ChiTietHoaDonModel.findByIdAndDelete(id);
+    const deletedDetail = await ChiTietDonHangModel.findByIdAndDelete(id);
 
     if (!deletedDetail) {
       return res.status(404).json({
@@ -69,4 +69,4 @@ routerChiTietHoaDon.delete("/:id", async (req, res, next) => {
   }
 });
 
-export default routerChiTietHoaDon;
+export default routerChiTietDonHang;

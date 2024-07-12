@@ -7,6 +7,10 @@ const TheLoaiSachSchema = new Schema({
     type: String,
     required: true,
   },
+  img: {
+    type: String,
+    required: true,
+  },
   hienthi: {
     type: Boolean,
     default: true,
