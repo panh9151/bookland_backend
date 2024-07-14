@@ -1,5 +1,7 @@
 import express from "express";
 import BinhLuanModel from "../models/BinhLuan/BinhLuanModel.js";
+import BaiVietModel from "../models/BaiViet/BaiVietModel.js";
+import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
 
 const routerBinhLuan = express.Router();
 
@@ -20,10 +22,36 @@ routerBinhLuan.get("/list", async (req, res, next) => {
 // Thêm bình luận mới
 routerBinhLuan.post("/add", async (req, res, next) => {
   try {
-    const { id, id_baiviet, id_nguoidung, noidung, hienthi } = req.body;
+    const { id_baiviet, id_nguoidung, noidung, hienthi } = req.body;
+
+    // Kiểm tra các trường bắt buộc
+    if (!id_baiviet || !id_nguoidung || !noidung) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Các trường bắt buộc không được để trống: id_baiviet, id_nguoidung, noidung",
+      });
+    }
+
+    // Kiểm tra bài viết có tồn tại không
+    const baiVietExists = await BaiVietModel.findById(id_baiviet);
+    if (!baiVietExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Bài viết không tồn tại",
+      });
+    }
+
+    // Kiểm tra người dùng có tồn tại không
+    const nguoiDungExists = await NguoiDungModel.findById(id_nguoidung);
+    if (!nguoiDungExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
 
     const newBinhLuan = new BinhLuanModel({
-      id,
       id_baiviet,
       id_nguoidung,
       noidung,
@@ -44,6 +72,33 @@ routerBinhLuan.put("/edit/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const { id_baiviet, id_nguoidung, noidung, hienthi } = req.body;
+
+    // Kiểm tra bình luận tồn tại
+    const binhLuanExists = await BinhLuanModel.findById(id);
+    if (!binhLuanExists) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bình luận để sửa đổi",
+      });
+    }
+
+    // Kiểm tra theo thể loại bài viết
+    const theLoaiExists = await BaiVietModel.findById(id_baiviet);
+    if (!theLoaiExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Thể loại bài viết không tồn tại",
+      });
+    }
+
+    // Kiểm tra người dùng
+    const nguoiDungExists = await NguoiDungModel.findById(id_nguoidung);
+    if (!nguoiDungExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
 
     const updatedBinhLuan = await BinhLuanModel.findByIdAndUpdate(
       id,
@@ -77,9 +132,9 @@ routerBinhLuan.put("/edit/:id", async (req, res, next) => {
 routerBinhLuan.delete("/delete/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const binhluan = await BinhLuanModel.findByIdAndDelete(id);
+    const binhLuan = await BinhLuanModel.findByIdAndDelete(id);
 
-    if (binhluan) {
+    if (binhLuan) {
       res.json({ status: 1, message: "Xóa bình luận thành công" });
     } else {
       res

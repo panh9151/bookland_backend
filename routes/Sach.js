@@ -46,6 +46,13 @@ routerSach.post("/add", async (req, res, next) => {
         message: "Không tìm thấy thông tin thể loại sách",
       });
     }
+    const sachExists = await SachModel.findOne({ ten, tacgia });
+    if (sachExists) {
+      return res.status(400).json({
+        status: 0,
+        message: "Sách đã tồn tại",
+      });
+    }
 
     const newSach = new SachModel({
       tacgia: tacgia,

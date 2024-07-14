@@ -5,8 +5,8 @@ const routerSachDetail = express.Router();
 
 routerSachDetail.get("/:id", async (req, res, next) => {
   try {
-    const { id_sach } = req.params;
-    const sach = await SachModel.findById(id_sach).populate("tacgia theloai");
+    const { id } = req.params;
+    const sach = await SachModel.findById(id).populate("tacgia theloaisach");
 
     if (!sach) {
       return res

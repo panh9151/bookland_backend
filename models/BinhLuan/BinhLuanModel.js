@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const BinhLuanSchema = new Schema({
-  id_blog: {
+  id_baiviet: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "BaiViet",

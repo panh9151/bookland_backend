@@ -8,13 +8,9 @@ const ChiTietDonHangSchema = new Schema({
     ref: "Sach",
     required: true,
   },
-  id_hoadon: {
+  id_donhang: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Order",
-    required: true,
-  },
-  price: {
-    type: Number,
+    ref: "DonHang",
     required: true,
   },
   soluong: {
