@@ -15,7 +15,7 @@ routerChiTietDonHang.get("/:id_donhang", async (req, res) => {
 
   try {
     const details = await ChiTietDonHangModel.find({ id_donhang })
-      .populate("id_sach", "ten gia") // Populate để lấy thông tin sách (tên và giá)
+      .populate("id_sach", "ten")
       .exec();
 
     if (!details || details.length === 0) {
@@ -33,12 +33,13 @@ routerChiTietDonHang.get("/:id_donhang", async (req, res) => {
 
 // Thêm chi tiết đơn hàng mới
 routerChiTietDonHang.post("/add", async (req, res) => {
-  const { id_sach, id_donhang, soluong } = req.body;
+  const { id_sach, id_donhang, soluong, gia } = req.body;
 
   try {
     const newDetail = new ChiTietDonHangModel({
       id_sach,
       id_donhang,
+      gia,
       soluong,
     });
 

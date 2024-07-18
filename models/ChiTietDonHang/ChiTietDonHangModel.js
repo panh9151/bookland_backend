@@ -13,6 +13,10 @@ const ChiTietDonHangSchema = new Schema({
     ref: "DonHang",
     required: true,
   },
+  gia: {
+    type: Number,
+    required: true,
+  },
   soluong: {
     type: Number,
     required: true,
