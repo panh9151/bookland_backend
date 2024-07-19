@@ -1,31 +1,26 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
 const SachSchema = new Schema({
   tacgia: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Tacgia", // Tên của model mà 'tacgia' tham chiếu đến
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "Tacgia", // Tên mô hình phải khớp với tên mô hình được xuất ra
   },
-  nxb: { type: String },
-  img: { type: String, required: true },
-  mota: { type: String },
-  ngayxuatban: { type: Date },
+  theloaisach: {
+    type: Schema.Types.ObjectId,
+    ref: "TheLoaiSach", // Tên mô hình phải khớp với tên mô hình được xuất ra
+  },
+  nxb: String,
+  img: String,
+  mota: String,
+  ngayxuatban: Date,
   ngaytao: { type: Date, default: Date.now },
-  ten: { type: String, required: true },
-  luotxem: { type: Number, default: 0, required: true },
-  gia: { type: Number, required: true },
-  giacu: { type: Number, default: 0, required: true },
-  ngonngu: { type: String },
-  theloaisach: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "TheLoaiSach", // Tên của model mà 'theloaisach' tham chiếu đến
-      required: true,
-    },
-  ],
-  hien_thi: { type: Boolean, default: true, required: true },
+  ten: String,
+  luotxem: Number,
+  gia: Number,
+  giacu: Number,
+  ngonngu: String,
+  hien_thi: Boolean,
 });
 
-const SachModel = mongoose.model("Sach", SachSchema);
-module.exports = SachModel;
+module.exports = mongoose.model("Sach", SachSchema);

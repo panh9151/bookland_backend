@@ -156,9 +156,9 @@ routerSach.delete("/delete/:id", async (req, res, next) => {
 routerSach.get("/list", async (req, res, next) => {
   try {
     const listSach = await SachModel.find()
-      .populate("TacGia", "ten") // Populate để lấy tên của tác giả
-      .populate("TheLoaiSach", "ten"); // Populate để lấy tên của thể loại sách
-    // listSach = 1;
+      .populate("tacgia", "ten") // Tên trường phải khớp với tên trong schema Tacgia
+      .populate("theloaisach", "ten"); // Tên trường phải khớp với tên trong schema TheLoaiSach
+
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sách:", error);
