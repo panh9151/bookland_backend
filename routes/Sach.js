@@ -156,8 +156,8 @@ routerSach.delete("/delete/:id", async (req, res, next) => {
 routerSach.get("/list", async (req, res, next) => {
   try {
     const listSach = await SachModel.find()
-      .populate("tacgia", "ten") // Tên trường phải khớp với tên trong schema Tacgia
-      .populate("theloaisach", "ten"); // Tên trường phải khớp với tên trong schema TheLoaiSach
+      .populate("tacgia", "ten")
+      .populate("theloaisach", "ten");
 
     res.json({ success: true, data: listSach });
   } catch (error) {

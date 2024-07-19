@@ -1,14 +1,12 @@
 const express = require("express");
-const SachYeuThichModel = require("../models/SachYeuThichModel.js");
+const SachYeuThichModel = require("../models/SachYeuThich/SachYeuThichModel.js");
 
 const routerSachYeuThich = express.Router();
 
-// Thêm sách yêu thích
 routerSachYeuThich.post("/add", async (req, res) => {
   try {
     const { id_nguoidung, id_sach } = req.body;
 
-    // Kiểm tra xem sách đã được thêm vào danh sách yêu thích chưa
     const sachYeuThichExists = await SachYeuThichModel.findOne({
       id_nguoidung,
       id_sach,
@@ -31,7 +29,6 @@ routerSachYeuThich.post("/add", async (req, res) => {
   }
 });
 
-// Xóa sách yêu thích
 routerSachYeuThich.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,7 +47,6 @@ routerSachYeuThich.delete("/delete/:id", async (req, res) => {
   }
 });
 
-// Lấy danh sách sách yêu thích
 routerSachYeuThich.get("/list/:id_nguoidung", async (req, res) => {
   try {
     const { id_nguoidung } = req.params;
