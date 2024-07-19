@@ -158,7 +158,7 @@ routerSach.get("/list", async (req, res, next) => {
     const listSach = await SachModel.find()
       .populate("TacGia", "ten") // Populate để lấy tên của tác giả
       .populate("TheLoaiSach", "ten"); // Populate để lấy tên của thể loại sách
-
+    // listSach = 1;
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sách:", error);
