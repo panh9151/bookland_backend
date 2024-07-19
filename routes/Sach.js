@@ -1,7 +1,8 @@
-import express from "express";
-import SachModel from "../models/Sach/SachModel.js";
-import TheLoaiSachModel from "../models/Theloai/TheLoaiSachModel.js";
-import TacgiaModel from "../models/Tacgia/TacgiaModel.js";
+const express = require("express");
+const SachModel = require("../models/Sach/SachModel.js");
+const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
+const TacgiaModel = require("../models/Tacgia/TacgiaModel.js");
+
 const routerSach = express.Router();
 
 // Thêm sách mới
@@ -165,4 +166,4 @@ routerSach.get("/list", async (req, res, next) => {
   }
 });
 
-export default routerSach;
+module.exports = routerSach;

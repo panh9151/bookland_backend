@@ -1,6 +1,6 @@
-import express from "express";
-import mongoose from "mongoose";
-import DonHangModel from "../models/DonHang/DonHangModel.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const DonHangModel = require("../models/DonHang/DonHangModel.js");
 
 const routerDonHang = express.Router();
 
@@ -95,4 +95,4 @@ routerDonHang.get("/list", async (req, res) => {
   }
 });
 
-export default routerDonHang;
+module.exports = routerDonHang;

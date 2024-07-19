@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const { Schema, model } = mongoose;
 
@@ -19,4 +19,4 @@ const ChiTietTheLoaiSachModel =
   mongoose.models.ChiTietTheLoaiSach ||
   model("ChiTietTheLoaiSach", ChiTietTheLoaiSachSchema);
 
-export default ChiTietTheLoaiSachModel;
+module.exports = ChiTietTheLoaiSachModel;

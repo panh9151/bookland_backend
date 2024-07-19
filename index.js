@@ -1,1 +1,1 @@
-import("./server.js");
+require("./bin/www");

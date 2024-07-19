@@ -1,5 +1,5 @@
-import BannerModel from "../models/Banner/BannerModel.js";
-import express from "express";
+const BannerModel = require("../models/Banner/BannerModel.js");
+const express = require("express");
 
 const routerBanner = express.Router();
 
@@ -86,4 +86,4 @@ routerBanner.get("/:id", async (req, res) => {
   }
 });
 
-export default routerBanner;
+module.exports = routerBanner;

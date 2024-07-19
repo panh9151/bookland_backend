@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const { Schema } = mongoose;
 function format(value) {
@@ -82,4 +82,4 @@ NguoiDungSchema.pre("save", async function (next) {
 
 const NguoiDungModel = mongoose.model("NguoiDung", NguoiDungSchema);
 
-export default NguoiDungModel;
+module.exports = NguoiDungModel;

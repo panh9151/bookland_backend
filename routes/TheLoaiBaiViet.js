@@ -1,5 +1,5 @@
-import express from "express";
-import TheLoaiBaiVietModel from "../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js";
+const express = require("express");
+const TheLoaiBaiVietModel = require("../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js");
 
 const routerTheLoaiBaiViet = express.Router();
 
@@ -108,4 +108,4 @@ routerTheLoaiBaiViet.get("/:id_theloaiblog", async (req, res) => {
   }
 });
 
-export default routerTheLoaiBaiViet;
+module.exports = routerTheLoaiBaiViet;

@@ -1,5 +1,5 @@
-import TacgiaModel from "../models/Tacgia/TacgiaModel.js";
-import express from "express";
+const TacgiaModel = require("../models/Tacgia/TacgiaModel.js");
+const express = require("express");
 
 const routerTacgia = express.Router();
 
@@ -113,4 +113,4 @@ routerTacgia.delete("/delete/:id", async function (req, res, next) {
   }
 });
 
-export default routerTacgia;
+module.exports = routerTacgia;

@@ -1,7 +1,7 @@
-import express from "express";
-import ChiTietTheLoaiSachModel from "../models/Theloai/ChiTietTheLoaiSachModel.js";
-import TheLoaiSachModel from "../models/Theloai/TheLoaiSachModel.js";
-import SachModel from "../models/Sach/SachModel.js";
+const express = require("express");
+const ChiTietTheLoaiSachModel = require("../models/Theloai/ChiTietTheLoaiSachModel.js");
+const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
+const SachModel = require("../models/Sach/SachModel.js");
 
 const routerChiTietTheLoaiSach = express.Router();
 
@@ -43,5 +43,4 @@ routerChiTietTheLoaiSach.get("/list/:id_theloai", async (req, res, next) => {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi máy chủ" });
   }
 });
-
-export default routerChiTietTheLoaiSach;
+module.exports = routerChiTietTheLoaiSach;

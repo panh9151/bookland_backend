@@ -1,6 +1,7 @@
-import ChiTietDonHangModel from "../models/ChiTietDonHang/ChiTietDonHangModel.js";
-import express from "express";
-import mongoose from "mongoose";
+const express = require("express");
+const mongoose = require("mongoose");
+const ChiTietDonHangModel = require("../models/ChiTietDonHang/ChiTietDonHangModel.js");
+
 const routerChiTietDonHang = express.Router();
 
 // Lấy chi tiết đơn hàng theo id đơn hàng
@@ -77,4 +78,4 @@ routerChiTietDonHang.delete("/:id", async (req, res) => {
   }
 });
 
-export default routerChiTietDonHang;
+module.exports = routerChiTietDonHang;

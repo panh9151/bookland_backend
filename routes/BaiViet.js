@@ -1,7 +1,7 @@
-import express from "express";
-import BaiVietModel from "../models/BaiViet/BaiVietModel.js";
-import TheLoaiBaiVietModel from "../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js";
-import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
+const express = require("express");
+const BaiVietModel = require("../models/BaiViet/BaiVietModel.js");
+const TheLoaiBaiVietModel = require("../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js");
+const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 
 const routerBaiViet = express.Router();
 
@@ -184,4 +184,4 @@ routerBaiViet.delete("/delete/:id", async (req, res, next) => {
   }
 });
 
-export default routerBaiViet;
+module.exports = routerBaiViet;

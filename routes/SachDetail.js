@@ -1,5 +1,5 @@
-import express from "express";
-import SachModel from "../models/Sach/SachModel.js";
+const express = require("express");
+const SachModel = require("../models/Sach/SachModel.js");
 
 const routerSachDetail = express.Router();
 
@@ -21,4 +21,4 @@ routerSachDetail.get("/:id", async (req, res, next) => {
   }
 });
 
-export default routerSachDetail;
+module.exports = routerSachDetail;

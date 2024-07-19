@@ -1,7 +1,6 @@
 // DanhGia.js
-
-import express from "express";
-import DanhGia from "../models/DanhGia/DanhGiaModel.js";
+const express = require("express");
+const DanhGia = require("../models/DanhGia/DanhGiaModel.js");
 
 const routerDanhGia = express.Router();
 
@@ -73,4 +72,4 @@ routerDanhGia.delete("/:id", async (req, res) => {
   }
 });
 
-export default routerDanhGia;
+module.exports = routerDanhGia;

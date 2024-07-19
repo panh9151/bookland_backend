@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -27,5 +27,4 @@ const ChiTietDonHangModel = mongoose.model(
   "ChiTietDonHang",
   ChiTietDonHangSchema
 );
-
-export default ChiTietDonHangModel;
+module.exports = ChiTietDonHangModel;

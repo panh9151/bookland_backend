@@ -1,7 +1,7 @@
-import express from "express";
-import BinhLuanModel from "../models/BinhLuan/BinhLuanModel.js";
-import BaiVietModel from "../models/BaiViet/BaiVietModel.js";
-import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
+const express = require("express");
+const BinhLuanModel = require("../models/BinhLuan/BinhLuanModel.js");
+const BaiVietModel = require("../models/BaiViet/BaiVietModel.js");
+const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 
 const routerBinhLuan = express.Router();
 
@@ -147,4 +147,4 @@ routerBinhLuan.delete("/delete/:id", async (req, res, next) => {
   }
 });
 
-export default routerBinhLuan;
+module.exports = routerBinhLuan;

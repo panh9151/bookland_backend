@@ -1,7 +1,7 @@
-import express from "express";
-import TheLoaiSachModel from "../models/TheLoai/TheLoaiSachModel.js";
-import ChiTietTheLoaiSachModel from "../models/TheLoai/ChiTietTheLoaiSachModel.js";
-import SachModel from "../models/Sach/SachModel.js";
+const express = require("express");
+const TheLoaiSachModel = require("../models/TheLoai/TheLoaiSachModel.js");
+const ChiTietTheLoaiSachModel = require("../models/TheLoai/ChiTietTheLoaiSachModel.js");
+const SachModel = require("../models/Sach/SachModel.js");
 
 const routerTheLoaiDetail = express.Router();
 
@@ -33,4 +33,4 @@ routerTheLoaiDetail.get("/:id_theloai", async (req, res, next) => {
   }
 });
 
-export default routerTheLoaiDetail;
+module.exports = routerTheLoaiDetail;

@@ -1,5 +1,5 @@
-import express from "express";
-import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js";
+const express = require("express");
+const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 
 const routerNguoiDung = express.Router();
 
@@ -88,4 +88,4 @@ routerNguoiDung.delete("/:id", async function (req, res, next) {
   }
 });
 
-export default routerNguoiDung;
+module.exports = routerNguoiDung;

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -30,4 +30,4 @@ const BinhLuanSchema = new Schema({
 
 const BinhLuanModel = mongoose.model("BinhLuan", BinhLuanSchema);
 
-export default BinhLuanModel;
+module.exports = BinhLuanModel;

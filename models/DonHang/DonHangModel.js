@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -20,4 +20,4 @@ const DonHangSchema = new Schema({
 
 const DonHangModel = mongoose.model("DonHang", DonHangSchema);
 
-export default DonHangModel;
+module.exports = DonHangModel;

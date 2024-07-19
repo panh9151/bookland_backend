@@ -1,5 +1,5 @@
-import express from "express";
-import TheLoaiSachModel from "../models/TheLoai/TheLoaiSachModel.js";
+const express = require("express");
+const TheLoaiSachModel = require("../models/TheLoai/TheLoaiSachModel.js");
 
 const routerTheLoaiSach = express.Router();
 
@@ -87,4 +87,4 @@ routerTheLoaiSach.delete("/delete/:id", async (req, res, next) => {
   }
 });
 
-export default routerTheLoaiSach;
+module.exports = routerTheLoaiSach;

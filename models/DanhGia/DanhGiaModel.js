@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -31,4 +31,4 @@ const DanhGiaSchema = new Schema({
 
 const DanhGia = mongoose.model("DanhGia", DanhGiaSchema);
 
-export default DanhGia;
+module.exports = DanhGia;

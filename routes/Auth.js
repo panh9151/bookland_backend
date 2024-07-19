@@ -1,7 +1,7 @@
-import express from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import NguoiDungModel from "../models/NguoiDung/NguoiDungModel.js"; // Giả sử NguoiDungModel được xuất đúng từ tệp này
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js"); // Giả sử NguoiDungModel được xuất đúng từ tệp này
 const routerAuth = express.Router();
 
 routerAuth.post("/login", async (req, res) => {
@@ -33,4 +33,4 @@ routerAuth.post("/login", async (req, res) => {
   }
 });
 
-export default routerAuth;
+module.exports = routerAuth;

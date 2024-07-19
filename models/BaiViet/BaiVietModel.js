@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -47,4 +47,4 @@ const BaiVietSchema = new Schema({
 
 const BaiVietModel = mongoose.model("BaiViet", BaiVietSchema);
 
-export default BaiVietModel;
+module.exports = BaiVietModel;
