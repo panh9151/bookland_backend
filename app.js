@@ -1,5 +1,4 @@
 const cors = require("cors");
-const connectDB = require("./config/db.js");
 const routerAdmin = require("./routes/Admin.js");
 const routerNguoiDung = require("./routes/NguoiDung.js");
 const routerSach = require("./routes/Sach.js");
@@ -31,11 +30,8 @@ const mongoose = require("mongoose");
 
 //Connect database
 mongoose
-  .connect(
-    process.env.DB_URL
-    // "mongodb+srv://panh9151:furnito123@furnito.8i9doe9.mongodb.net/furnito",
-
-  )
+  .connect(process.env.DB_URL) // Link đến DB_URL trong file .env
+  // .connect("mongodb://localhost:27017/Bookland")
   .then(() => console.log(">>>>>>>>>> DB Connected!!!!!!"))
   .catch((err) => console.log(">>>>>>>>> DB Error: ", err));
 
@@ -53,7 +49,7 @@ app.use(cors());
 // app.set("view engine", "jade");
 
 //db connect
-connectDB();
+// connectDB();
 app.get("/", (req, res) => {
   res.send("API Working");
 });
