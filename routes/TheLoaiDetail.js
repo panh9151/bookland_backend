@@ -1,6 +1,6 @@
 const express = require("express");
-const TheLoaiSachModel = require("../models/TheLoai/TheLoaiSachModel.js");
-const ChiTietTheLoaiSachModel = require("../models/TheLoai/ChiTietTheLoaiSachModel.js");
+const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
+const ChiTietTheLoaiSachModel = require("../models/Theloai/ChiTietTheLoaiSachModel.js");
 const SachModel = require("../models/Sach/SachModel.js");
 
 const routerTheLoaiDetail = express.Router();
