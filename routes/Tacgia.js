@@ -35,6 +35,13 @@ routerTacgia.get("/:id", async function (req, res, next) {
 routerTacgia.post("/add", async function (req, res, next) {
   try {
     const { ten, img, tieusu, id_hienthi } = req.body;
+    const existingTacgia = await TacgiaModel.findOne({ ten });
+    if (existingTacgia) {
+      return res.status(400).json({
+        status: 0,
+        message: "Tác giả đã tồn tại",
+      });
+    }
 
     const newTacgia = new TacgiaModel({
       ten,
