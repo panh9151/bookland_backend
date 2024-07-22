@@ -119,5 +119,19 @@ routerTacgia.delete("/delete/:id", async function (req, res, next) {
     res.json({ status: 0, message: "Xóa tác giả thất bại" });
   }
 });
+routerTacgia.get("/search", async function (req, res, next) {
+  try {
+    const keyword = req.query.keyword || "";
+    const authorBook = await TacgiaModel.find({
+      $or: [{ ten: { $regex: keyword, $options: "i" } }],
+    });
+    res.json({
+      success: true,
+      data: authorBook,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
 
 module.exports = routerTacgia;

@@ -152,6 +152,25 @@ routerSach.delete("/delete/:id", async (req, res, next) => {
     res.status(500).json({ status: 0, message: "Xóa sách thất bại" });
   }
 });
+routerSach.get("/search", async function (req, res, next) {
+  try {
+    const keyword = req.query.keyword || "";
+    const foundBook = await SachModel.find({
+      $or: [
+        { nxb: { $regex: keyword, $options: "i" } },
+        { ten: { $regex: keyword, $options: "i" } },
+      ],
+    });
+    res.json({
+      success: true,
+      data: foundBook,
+    });
+    // const foundBook = await TacgiaModel.find();
+  } catch (error) {
+    console.log({ error });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
 // Lấy danh sách sách
 routerSach.get("/list", async (req, res, next) => {
   try {

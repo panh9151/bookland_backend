@@ -65,7 +65,7 @@ routerBanner.get("/list", async (req, res) => {
       ngaybatdau: { $lte: currentDate },
       ngayketthuc: { $gte: currentDate },
       hien_thi: true,
-    }).sort({ uutien: 1 });
+    });
     res.status(200).json(banners);
   } catch (error) {
     res.status(400).json({ message: error.message });
