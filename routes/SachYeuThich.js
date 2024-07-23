@@ -3,7 +3,7 @@ const SachYeuThichModel = require("../models/SachYeuThich/SachYeuThichModel.js")
 
 const routerSachYeuThich = express.Router();
 
-routerSachYeuThich.post("/add", async (req, res) => {
+routerSachYeuThich.post("/", async (req, res) => {
   try {
     const { id_nguoidung, id_sach } = req.body;
 
@@ -29,7 +29,7 @@ routerSachYeuThich.post("/add", async (req, res) => {
   }
 });
 
-routerSachYeuThich.delete("/delete/:id", async (req, res) => {
+routerSachYeuThich.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const sachYeuThich = await SachYeuThichModel.findByIdAndDelete(id);
@@ -47,7 +47,7 @@ routerSachYeuThich.delete("/delete/:id", async (req, res) => {
   }
 });
 
-routerSachYeuThich.get("/list/:id_nguoidung", async (req, res) => {
+routerSachYeuThich.get("/:id_nguoidung", async (req, res) => {
   try {
     const { id_nguoidung } = req.params;
     const listSachYeuThich = await SachYeuThichModel.find({ id_nguoidung })

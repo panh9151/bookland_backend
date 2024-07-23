@@ -5,7 +5,7 @@ const DonHangModel = require("../models/DonHang/DonHangModel.js");
 const routerDonHang = express.Router();
 
 // Tạo đơn hàng mới
-routerDonHang.post("/add", async (req, res) => {
+routerDonHang.post("/", async (req, res) => {
   const {
     id_nguoidung,
     diachi,
@@ -86,10 +86,31 @@ routerDonHang.delete("/:id", async (req, res) => {
 });
 
 // Lấy danh sách đơn hàng
-routerDonHang.get("/list", async (req, res) => {
+routerDonHang.get("/", async (req, res) => {
   try {
     const listDonHang = await DonHangModel.find();
     res.status(200).json(listDonHang);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Lấy thông tin một đơn hàng theo ID
+routerDonHang.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "ID đơn hàng không hợp lệ" });
+  }
+
+  try {
+    const donHang = await DonHangModel.findById(id);
+
+    if (!donHang) {
+      return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+    }
+
+    res.status(200).json(donHang);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -4,7 +4,7 @@ const express = require("express");
 const routerBanner = express.Router();
 
 // Thêm banner
-routerBanner.post("/add", async (req, res) => {
+routerBanner.post("/", async (req, res) => {
   const { url, image, ngaybatdau, ngayketthuc, uutien, hien_thi } = req.body;
   try {
     const newBanner = new BannerModel({
@@ -24,7 +24,7 @@ routerBanner.post("/add", async (req, res) => {
 });
 
 // Sửa banner
-routerBanner.put("/edit/:id", async (req, res) => {
+routerBanner.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { url, image, ngaybatdau, ngayketthuc, uutien, hien_thi } = req.body;
   try {
@@ -47,7 +47,7 @@ routerBanner.put("/edit/:id", async (req, res) => {
 });
 
 // Xóa banner
-routerBanner.delete("/delete/:id", async (req, res) => {
+routerBanner.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await BannerModel.findByIdAndDelete(id);
@@ -58,7 +58,7 @@ routerBanner.delete("/delete/:id", async (req, res) => {
 });
 
 // Lấy danh sách banner
-routerBanner.get("/list", async (req, res) => {
+routerBanner.get("/", async (req, res) => {
   const currentDate = new Date();
   try {
     const banners = await BannerModel.find({
@@ -71,8 +71,8 @@ routerBanner.get("/list", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-// Lấy 1 banner
 
+// get banner by id
 routerBanner.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {

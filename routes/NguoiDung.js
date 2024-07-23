@@ -4,7 +4,7 @@ const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 const routerNguoiDung = express.Router();
 
 // Lấy danh sách người dùng bình thường
-routerNguoiDung.get("/list", async function (req, res, next) {
+routerNguoiDung.get("/", async function (req, res, next) {
   try {
     const listNguoiDungs = await NguoiDungModel.find({ loaitaikhoan: 0 });
     res.json({ success: true, data: listNguoiDungs });
@@ -14,8 +14,30 @@ routerNguoiDung.get("/list", async function (req, res, next) {
   }
 });
 
+// Lấy thông tin một người dùng theo ID
+routerNguoiDung.get("/:id", async function (req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const nguoiDung = await NguoiDungModel.findById(id);
+
+    if (!nguoiDung || nguoiDung.loaitaikhoan !== 0) {
+      return res.status(404).json({
+        status: 0,
+        message:
+          "Người dùng không tồn tại hoặc không phải người dùng bình thường",
+      });
+    }
+
+    res.json({ success: true, data: nguoiDung });
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin người dùng:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // Thêm người dùng bình thường
-routerNguoiDung.post("/add", async function (req, res, next) {
+routerNguoiDung.post("/", async function (req, res, next) {
   try {
     const { ten, matkhau, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
@@ -44,7 +66,7 @@ routerNguoiDung.post("/add", async function (req, res, next) {
 });
 
 // Sửa thông tin người dùng bình thường
-routerNguoiDung.put("/edit/:id", async function (req, res, next) {
+routerNguoiDung.put("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
     const { ten, email, matkhau } = req.body;

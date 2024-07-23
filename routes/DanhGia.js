@@ -4,7 +4,7 @@ const DanhGia = require("../models/DanhGia/DanhGiaModel.js");
 
 const routerDanhGia = express.Router();
 
-routerDanhGia.get("/list", async (req, res) => {
+routerDanhGia.get("/", async (req, res) => {
   try {
     const DanhGias = await DanhGia.find({})
       .populate("id_nguoidung", "ten")
@@ -16,7 +16,8 @@ routerDanhGia.get("/list", async (req, res) => {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
-routerDanhGia.get("/sach/:id", async (req, res) => {
+
+routerDanhGia.get("/:id", async (req, res) => {
   try {
     const { id_sach } = req.params;
     const DanhGias = await DanhGia.find({ id_sach, hien_thi: true })
@@ -36,8 +37,46 @@ routerDanhGia.get("/sach/:id", async (req, res) => {
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
+
+// Sửa thông tin DanhGia
+routerDanhGia.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id_nguoidung, id_sach, diem, txt, hien_thi } = req.body;
+
+    // Tìm và cập nhật đánh giá
+    const updatedDanhGia = await DanhGia.findByIdAndUpdate(
+      id,
+      {
+        id_nguoidung,
+        id_sach,
+        diem,
+        txt,
+        hien_thi,
+      },
+      { new: true } // Tùy chọn này trả về tài liệu đã cập nhật thay vì tài liệu gốc
+    );
+
+    if (updatedDanhGia) {
+      res.json({
+        status: 1,
+        message: "Sửa DanhGia thành công",
+        data: updatedDanhGia,
+      });
+    } else {
+      res.status(404).json({
+        status: 0,
+        message: "Không tìm thấy DanhGia để sửa đổi",
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi khi sửa DanhGia:", error);
+    res.status(500).json({ status: 0, message: "Sửa DanhGia thất bại", error });
+  }
+});
+
 //  Tạo DanhGia mới
-routerDanhGia.post("/add", async (req, res) => {
+routerDanhGia.post("/", async (req, res) => {
   try {
     const { id_nguoidung, id_sach, diem, txt } = req.body;
 

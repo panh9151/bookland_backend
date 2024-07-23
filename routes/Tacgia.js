@@ -4,7 +4,7 @@ const express = require("express");
 const routerTacgia = express.Router();
 
 // Lấy danh sách tác giả
-routerTacgia.get("/list", async function (req, res, next) {
+routerTacgia.get("/", async function (req, res, next) {
   try {
     const listTacgia = await TacgiaModel.find({});
     res.json({ success: true, data: listTacgia });
@@ -32,7 +32,7 @@ routerTacgia.get("/:id", async function (req, res, next) {
 });
 
 // Thêm tác giả
-routerTacgia.post("/add", async function (req, res, next) {
+routerTacgia.post("/", async function (req, res, next) {
   try {
     const { ten, img, tieusu, id_hienthi } = req.body;
 
@@ -60,7 +60,7 @@ routerTacgia.post("/add", async function (req, res, next) {
 });
 
 // Sửa tác giả
-routerTacgia.put("/edit/:id", async function (req, res, next) {
+routerTacgia.put("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
     const { ten, img, tieusu, id_hienthi } = req.body;
@@ -94,7 +94,7 @@ routerTacgia.put("/edit/:id", async function (req, res, next) {
 });
 
 // Xóa tác giả
-routerTacgia.delete("/delete/:id", async function (req, res, next) {
+routerTacgia.delete("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
 

@@ -4,7 +4,7 @@ const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
 const routerTheLoaiSach = express.Router();
 
 // Lấy danh sách thể loại sách
-routerTheLoaiSach.get("/list", async (req, res, next) => {
+routerTheLoaiSach.get("/", async (req, res, next) => {
   try {
     const listTheLoai = await TheLoaiSachModel.find();
     res.json({ success: true, data: listTheLoai });
@@ -14,8 +14,27 @@ routerTheLoaiSach.get("/list", async (req, res, next) => {
   }
 });
 
+// Lấy thông tin một thể loại sách theo ID
+routerTheLoaiSach.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const theLoai = await TheLoaiSachModel.findById(id);
+
+    if (!theLoai) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy thể loại sách" });
+    }
+
+    res.json({ success: true, data: theLoai });
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin thể loại sách:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi máy chủ" });
+  }
+});
+
 // Thêm thể loại sách mới
-routerTheLoaiSach.post("/add", async (req, res, next) => {
+routerTheLoaiSach.post("/", async (req, res, next) => {
   try {
     const { ten, img, hienthi } = req.body;
 
@@ -37,7 +56,7 @@ routerTheLoaiSach.post("/add", async (req, res, next) => {
 });
 
 // Sửa thông tin thể loại sách
-routerTheLoaiSach.put("/edit/:id", async (req, res, next) => {
+routerTheLoaiSach.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const { ten, img, hienthi } = req.body;
@@ -69,7 +88,7 @@ routerTheLoaiSach.put("/edit/:id", async (req, res, next) => {
 });
 
 // Xóa thể loại sách
-routerTheLoaiSach.delete("/delete/:id", async (req, res, next) => {
+routerTheLoaiSach.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const theLoai = await TheLoaiSachModel.findByIdAndDelete(id);

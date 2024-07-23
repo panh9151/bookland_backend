@@ -2,7 +2,7 @@ const express = require("express");
 const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 
 const routerAdmin = express.Router();
-routerAdmin.get("/list", async function (req, res, next) {
+routerAdmin.get("/", async function (req, res, next) {
   try {
     const listAdmins = await NguoiDungModel.find({ loaitaikhoan: 1 });
     res.json({ success: true, data: listAdmins });
@@ -12,8 +12,28 @@ routerAdmin.get("/list", async function (req, res, next) {
   }
 });
 
+// Lấy chi tiết admin theo ID
+routerAdmin.get("/:id", async function (req, res, next) {
+  try {
+    const { id } = req.params;
+    const admin = await NguoiDungModel.findById(id);
+
+    if (admin && admin.loaitaikhoan === 1) {
+      res.json({ success: true, data: admin });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Admin không tồn tại hoặc không phải admin",
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết admin:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // Thêm admin
-routerAdmin.post("/add", async function (req, res, next) {
+routerAdmin.post("/", async function (req, res, next) {
   try {
     const { ten, matkhau, email, gioitinh, avt, sdt, loaitaikhoan } = req.body;
 
@@ -42,7 +62,7 @@ routerAdmin.post("/add", async function (req, res, next) {
 });
 
 // Sửa thông tin admin
-routerAdmin.put("/edit", async function (req, res, next) {
+routerAdmin.put("/:id", async function (req, res, next) {
   try {
     const { id_nguoidung, ten, email, matkhau } = req.body;
     const NguoiDung = await NguoiDungModel.findById(id_nguoidung);
@@ -65,7 +85,7 @@ routerAdmin.put("/edit", async function (req, res, next) {
 });
 
 // Xóa admin
-routerAdmin.delete("/delete/:id", async function (req, res, next) {
+routerAdmin.delete("/:id", async function (req, res, next) {
   try {
     const { id } = req.params;
     const NguoiDung = await NguoiDungModel.findById(id);

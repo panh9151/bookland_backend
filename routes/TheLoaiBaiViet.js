@@ -4,7 +4,7 @@ const TheLoaiBaiVietModel = require("../models/TheLoaiBaiViet/TheLoaiBaiVietMode
 const routerTheLoaiBaiViet = express.Router();
 
 // Thêm thể loại bài viết mới
-routerTheLoaiBaiViet.post("/add", async (req, res) => {
+routerTheLoaiBaiViet.post("/", async (req, res) => {
   try {
     const { ten, hienthi } = req.body;
     const newTheLoaiBaiViet = new TheLoaiBaiVietModel({
@@ -23,7 +23,7 @@ routerTheLoaiBaiViet.post("/add", async (req, res) => {
 });
 
 // Sửa thể loại bài viết
-routerTheLoaiBaiViet.put("/edit/:id_theloaiblog", async (req, res) => {
+routerTheLoaiBaiViet.put("/:id_theloaiblog", async (req, res) => {
   try {
     const { id_theloaiblog } = req.params;
     const { ten, hienthi } = req.body;
@@ -55,7 +55,7 @@ routerTheLoaiBaiViet.put("/edit/:id_theloaiblog", async (req, res) => {
 });
 
 // Xóa thể loại bài viết
-routerTheLoaiBaiViet.delete("/delete/:id_theloaiblog", async (req, res) => {
+routerTheLoaiBaiViet.delete("/:id_theloaiblog", async (req, res) => {
   try {
     const { id_theloaiblog } = req.params;
     const deletedTheLoaiBaiViet = await TheLoaiBaiVietModel.findByIdAndDelete(
@@ -79,7 +79,7 @@ routerTheLoaiBaiViet.delete("/delete/:id_theloaiblog", async (req, res) => {
 });
 
 // Lấy danh sách thể loại bài viết
-routerTheLoaiBaiViet.get("/list", async (req, res) => {
+routerTheLoaiBaiViet.get("/", async (req, res) => {
   try {
     const listTheLoaiBaiViet = await TheLoaiBaiVietModel.find({});
     res.json({ success: true, data: listTheLoaiBaiViet });

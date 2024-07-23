@@ -6,7 +6,7 @@ const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 const routerBaiViet = express.Router();
 
 // Lấy danh sách bài viết
-routerBaiViet.get("/list", async (req, res, next) => {
+routerBaiViet.get("/", async (req, res, next) => {
   try {
     const listBaiViet = await BaiVietModel.find()
       .populate("theloaibaiviet", "ten")
@@ -18,8 +18,29 @@ routerBaiViet.get("/list", async (req, res, next) => {
   }
 });
 
+// Lấy chi tiết bài viết theo ID
+routerBaiViet.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const baiViet = await BaiVietModel.findById(id)
+      .populate("theloaibaiviet", "ten")
+      .populate("nguoidung", "ten");
+
+    if (baiViet) {
+      res.json({ success: true, data: baiViet });
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy bài viết" });
+    }
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết bài viết:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // Thêm bài viết mới
-routerBaiViet.post("/add", async (req, res) => {
+routerBaiViet.post("/", async (req, res) => {
   const {
     theloaibaiviet,
     nguoidung,
@@ -97,7 +118,7 @@ routerBaiViet.post("/add", async (req, res) => {
 });
 
 // Sửa thông tin bài viết
-routerBaiViet.put("/edit/:id", async (req, res, next) => {
+routerBaiViet.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -166,7 +187,7 @@ routerBaiViet.put("/edit/:id", async (req, res, next) => {
 });
 
 // Xóa bài viết
-routerBaiViet.delete("/delete/:id", async (req, res, next) => {
+routerBaiViet.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const BaiViet = await BaiVietModel.findByIdAndDelete(id);

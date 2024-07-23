@@ -6,7 +6,7 @@ const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 const routerBinhLuan = express.Router();
 
 // Lấy danh sách bình luận
-routerBinhLuan.get("/list", async (req, res, next) => {
+routerBinhLuan.get("/", async (req, res, next) => {
   try {
     const listBinhLuan = await BinhLuanModel.find()
       .populate("id_baiviet", "tieude")
@@ -19,8 +19,30 @@ routerBinhLuan.get("/list", async (req, res, next) => {
   }
 });
 
+// Lấy chi tiết bình luận theo ID
+routerBinhLuan.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const binhLuan = await BinhLuanModel.findById(id)
+      .populate("id_baiviet", "tieude")
+      .populate("id_nguoidung", "ten");
+
+    if (binhLuan) {
+      res.json({ success: true, data: binhLuan });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bình luận",
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết bình luận:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // Thêm bình luận mới
-routerBinhLuan.post("/add", async (req, res, next) => {
+routerBinhLuan.post("/", async (req, res, next) => {
   try {
     const { id_baiviet, id_nguoidung, noidung, hienthi } = req.body;
 
@@ -68,7 +90,7 @@ routerBinhLuan.post("/add", async (req, res, next) => {
 });
 
 // Sửa thông tin bình luận
-routerBinhLuan.put("/edit/:id", async (req, res, next) => {
+routerBinhLuan.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const { id_baiviet, id_nguoidung, noidung, hienthi } = req.body;
@@ -129,7 +151,7 @@ routerBinhLuan.put("/edit/:id", async (req, res, next) => {
 });
 
 // Xóa bình luận
-routerBinhLuan.delete("/delete/:id", async (req, res, next) => {
+routerBinhLuan.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const binhLuan = await BinhLuanModel.findByIdAndDelete(id);

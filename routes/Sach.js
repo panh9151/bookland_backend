@@ -6,7 +6,7 @@ const TacgiaModel = require("../models/Tacgia/TacgiaModel.js");
 const routerSach = express.Router();
 
 // Thêm sách mới
-routerSach.post("/add", async (req, res, next) => {
+routerSach.post("/", async (req, res, next) => {
   try {
     const {
       tacgia,
@@ -80,7 +80,7 @@ routerSach.post("/add", async (req, res, next) => {
 });
 
 // Sửa thông tin sách
-routerSach.put("/edit/:id", async (req, res, next) => {
+routerSach.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -135,7 +135,7 @@ routerSach.put("/edit/:id", async (req, res, next) => {
 });
 
 // Xóa sách
-routerSach.delete("/delete/:id", async (req, res, next) => {
+routerSach.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const sach = await SachModel.findByIdAndDelete(id);
@@ -152,8 +152,9 @@ routerSach.delete("/delete/:id", async (req, res, next) => {
     res.status(500).json({ status: 0, message: "Xóa sách thất bại" });
   }
 });
+
 // Lấy danh sách sách
-routerSach.get("/list", async (req, res, next) => {
+routerSach.get("/", async (req, res, next) => {
   try {
     const listSach = await SachModel.find()
       .populate("tacgia", "ten")
@@ -162,6 +163,27 @@ routerSach.get("/list", async (req, res, next) => {
     res.json({ success: true, data: listSach });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sách:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi máy chủ" });
+  }
+});
+
+// Lấy thông tin một cuốn sách theo ID
+routerSach.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const sach = await SachModel.findById(id)
+      .populate("tacgia", "ten")
+      .populate("theloaisach", "ten");
+
+    if (!sach) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy sách" });
+    }
+
+    res.json({ success: true, data: sach });
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin sách:", error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi máy chủ" });
   }
 });
