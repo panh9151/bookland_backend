@@ -1,11 +1,11 @@
 const express = require("express");
-const routerTimKiem = express.Router();
+const Fuse = require("fuse.js");
+const diacritics = require("diacritics");
 const mongoose = require("mongoose");
+const routerTimKiem = express.Router();
 const TimKiemModel = require("../models/TimKiem/TimKiemModel.js");
 const Sach = require("../models/Sach/SachModel.js"); // Đường dẫn đến mô hình sách
 const Tacgia = require("../models/Tacgia/TacgiaModel.js"); // Đường dẫn đến mô hình tác giả
-const Fuse = require("fuse.js");
-const diacritics = require("diacritics");
 
 // Hàm loại bỏ dấu
 function removeDiacritics(text) {
@@ -23,42 +23,40 @@ routerTimKiem.get("/search", async (req, res) => {
         .json({ message: "Vui lòng cung cấp từ khóa tìm kiếm." });
     }
 
-    // Loại bỏ dấu trong từ khóa tìm kiếm
+    // Loại bỏ dấu
     const normalizedText = removeDiacritics(text);
 
-    // Lấy tất cả sách và tác giả từ cơ sở dữ liệu
-    const books = await Sach.find({}).lean();
-    const authors = await Tacgia.find({}).lean();
+    const sach = await Sach.find({}).lean();
+    const tacgia = await Tacgia.find({}).lean();
 
-    // Tiền xử lý dữ liệu để loại bỏ dấu
-    books.forEach((book) => {
+    sach.forEach((book) => {
       book.tenNormalized = removeDiacritics(book.ten);
     });
 
-    authors.forEach((author) => {
+    tacgia.forEach((author) => {
       author.tenNormalized = removeDiacritics(author.ten);
     });
 
     // Khởi tạo Fuse.js với các tùy chọn cho sách
-    const fuseBooks = new Fuse(books, {
+    const fusesach = new Fuse(sach, {
       keys: ["tenNormalized"], // Các trường để tìm kiếm
       includeScore: true, // Bao gồm điểm số tìm kiếm trong kết quả
       threshold: 0.3, // Ngưỡng độ tương đồng
     });
 
     // Khởi tạo Fuse.js với các tùy chọn cho tác giả
-    const fuseAuthors = new Fuse(authors, {
+    const fusetacgia = new Fuse(tacgia, {
       keys: ["tenNormalized"], // Các trường để tìm kiếm
       includeScore: true, // Bao gồm điểm số tìm kiếm trong kết quả
       threshold: 0.3, // Ngưỡng độ tương đồng
     });
 
     // Tìm kiếm sách
-    const bookResults = fuseBooks
+    const bookResults = fusesach
       .search(normalizedText)
       .map((result) => result.item);
     // Tìm kiếm tác giả
-    const authorResults = fuseAuthors
+    const authorResults = fusetacgia
       .search(normalizedText)
       .map((result) => result.item);
 
@@ -70,11 +68,9 @@ routerTimKiem.get("/search", async (req, res) => {
     const count = bookNames.length + authorNames.length;
 
     if (count === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "Không tìm thấy kết quả phù hợp với từ khóa của bạn.",
-        });
+      return res.status(404).json({
+        message: "Không tìm thấy kết quả phù hợp với từ khóa của bạn.",
+      });
     }
 
     // Cập nhật hoặc tạo mới lịch sử tìm kiếm
@@ -95,7 +91,16 @@ routerTimKiem.get("/search", async (req, res) => {
     }
 
     // Trả về tên sách và tên tác giả
-    res.json({ count, books: bookNames, authors: authorNames });
+    res.json({ count, sach: bookNames, tacgia: authorNames });
+  } catch (error) {
+    console.error("Lỗi:", error); // In lỗi để kiểm tra
+    res.status(500).json({ message: error.message });
+  }
+});
+routerTimKiem.get("/search/history", async (req, res) => {
+  try {
+    const searchHistory = await TimKiemModel.find({}).lean();
+    res.json(searchHistory);
   } catch (error) {
     console.error("Lỗi:", error); // In lỗi để kiểm tra
     res.status(500).json({ message: error.message });
