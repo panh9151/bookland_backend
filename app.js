@@ -15,6 +15,7 @@ const routerBinhLuan = require("./routes/BinhLuan.js");
 const routerChiTietDonHang = require("./routes/ChiTietDonHang.js");
 const routerTheLoaiBaiViet = require("./routes/TheLoaiBaiViet.js");
 const routerSachYeuThich = require("./routes/SachYeuThich.js");
+const routerTimKiem = require("./routes/TimKiem.js");
 var express = require("express");
 var path = require("path");
 // var cors = require("cors");
@@ -78,6 +79,7 @@ app.use("/api/binhluan", routerBinhLuan);
 app.use("/api/chitietdonhang", routerChiTietDonHang);
 app.use("/api/theloaibaiviet", routerTheLoaiBaiViet);
 app.use("/api/sachyeuthich", routerSachYeuThich);
+app.use("/api/timkiem", routerTimKiem);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
