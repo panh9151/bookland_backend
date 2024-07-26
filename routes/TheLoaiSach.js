@@ -1,5 +1,6 @@
 const express = require("express");
 const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
+const SachModel = require("../models/Sach/SachModel.js"); // Điều chỉnh đường dẫn tới model Sach
 
 const routerTheLoaiSach = express.Router();
 
@@ -91,15 +92,21 @@ routerTheLoaiSach.put("/:id", async (req, res, next) => {
 routerTheLoaiSach.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const theLoai = await TheLoaiSachModel.findByIdAndDelete(id);
+    const theLoai = await TheLoaiSachModel.findById(id);
 
-    if (theLoai) {
-      res.json({ status: 1, message: "Xóa thể loại sách thành công" });
-    } else {
-      res
-        .status(404)
-        .json({ status: 0, message: "Không tìm thấy thể loại sách để xóa" });
+    if (!theLoai) {
+      return res.status(404).json({
+        status: 0,
+        message: "Không tìm thấy thể loại sách để xóa",
+      });
     }
+
+    // Xóa các thể loại liên quan trong sách
+    await SachModel.updateMany({ theloai: id }, { $pull: { theloai: id } });
+
+    await theLoai.remove();
+
+    res.json({ status: 1, message: "Xóa thể loại sách thành công" });
   } catch (err) {
     console.error("Lỗi khi xóa thể loại sách:", err);
     res.status(500).json({ status: 0, message: "Xóa thể loại sách thất bại" });

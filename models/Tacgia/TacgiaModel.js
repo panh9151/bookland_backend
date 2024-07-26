@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const SachModel = require("../Sach/SachModel.js");
 const TacgiaSchema = new Schema({
   ten: {
     type: String,
