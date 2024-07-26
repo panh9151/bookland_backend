@@ -1,6 +1,7 @@
+// models/TheLoaiSachModel.js
 const mongoose = require("mongoose");
-
-const { Schema, model, models } = mongoose;
+const Schema = mongoose.Schema;
+const SachModel = require("./models/Sach/SachModel"); // Import model Sach
 
 const TheLoaiSachSchema = new Schema({
   ten: {
@@ -17,7 +18,19 @@ const TheLoaiSachSchema = new Schema({
   },
 });
 
-const TheLoaiSachModel =
-  models.TheLoaiSach || model("TheLoaiSach", TheLoaiSachSchema);
+// Thiết lập hook pre hoặc post
+TheLoaiSachSchema.pre("remove", async function (next) {
+  try {
+    // Xóa thể loại trong sách tương ứng
+    await SachModel.updateMany(
+      { theloai: this._id },
+      { $pull: { theloai: this._id } }
+    );
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
+const TheLoaiSachModel = mongoose.model("TheLoaiSach", TheLoaiSachSchema);
 module.exports = TheLoaiSachModel;

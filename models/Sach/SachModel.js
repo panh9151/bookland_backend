@@ -2,25 +2,48 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SachSchema = new Schema({
+  ten: {
+    type: String,
+    required: true,
+  },
   tacgia: {
     type: Schema.Types.ObjectId,
-    ref: "Tacgia", // Tên mô hình phải khớp với tên mô hình được xuất ra
+    ref: "Tacgia",
+    default: null,
   },
-  theloaisach: {
-    type: Schema.Types.ObjectId,
-    ref: "TheLoaiSach", // Tên mô hình phải khớp với tên mô hình được xuất ra
+  img: {
+    type: String,
   },
-  nxb: String,
-  img: String,
-  mota: String,
-  ngayxuatban: Date,
-  ngaytao: { type: Date, default: Date.now },
-  ten: String,
-  luotxem: Number,
-  gia: Number,
-  giacu: Number,
-  ngonngu: String,
-  hien_thi: Boolean,
+  mota: {
+    type: String,
+  },
+  ngayxuatban: {
+    type: Date,
+  },
+  ngaytao: {
+    type: Date,
+    default: Date.now,
+  },
+  gia: {
+    type: Number,
+  },
+  nguoimua: {
+    type: Number,
+    default: 0,
+  },
+  hinhanh: {
+    type: String,
+  },
+  ngonngu: {
+    type: String,
+  },
+  theloaisach: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "TheLoaiSach",
+    },
+  ],
 });
 
-module.exports = mongoose.model("Sach", SachSchema);
+const SachModel = mongoose.model("Sach", SachSchema);
+module.exports = SachModel;

@@ -18,6 +18,15 @@ const TacgiaSchema = new Schema({
     required: true,
   },
 });
+TacgiaSchema.pre("remove", async function (next) {
+  try {
+    // Cập nhật tác giả của các sách thành null
+    await SachModel.updateMany({ tacgia: this._id }, { tacgia: null });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const TacgiaModel = mongoose.model("Tacgia", TacgiaSchema);
 module.exports = TacgiaModel;

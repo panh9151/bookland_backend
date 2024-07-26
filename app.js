@@ -16,6 +16,7 @@ const routerChiTietDonHang = require("./routes/ChiTietDonHang.js");
 const routerTheLoaiBaiViet = require("./routes/TheLoaiBaiViet.js");
 const routerSachYeuThich = require("./routes/SachYeuThich.js");
 const routerTimKiem = require("./routes/TimKiem.js");
+const routerLuotTim = require("./routes/LuotTim.js");
 var express = require("express");
 var path = require("path");
 // var cors = require("cors");
@@ -26,6 +27,7 @@ var cookieParser = require("cookie-parser");
 
 // Library declaration
 const mongoose = require("mongoose");
+
 // require("./models/UserModel");
 // require("./models/CategoryModel");
 
@@ -80,6 +82,7 @@ app.use("/api/chitietdonhang", routerChiTietDonHang);
 app.use("/api/theloaibaiviet", routerTheLoaiBaiViet);
 app.use("/api/sachyeuthich", routerSachYeuThich);
 app.use("/api/timkiem", routerTimKiem);
+app.use("/api/luottim", routerLuotTim);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
