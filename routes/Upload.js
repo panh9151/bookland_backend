@@ -1,9 +1,11 @@
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const express = require("express");
 const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+const router = express.Router();
 
 // Cấu hình Cloudinary
 cloudinary.config({
@@ -16,11 +18,16 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "Bookland", // Tên thư mục lưu trữ hình ảnh trên Cloudinary
+    folder: "Bookland",
     allowedFormats: ["jpeg", "png", "jpg"],
   },
 });
 
 const upload = multer({ storage: storage });
 
-module.exports = { upload, cloudinary };
+// Route để tải lên ảnh
+router.post("/upload", upload.single("image"), (req, res) => {
+  res.json({ url: req.file.path });
+});
+
+module.exports = router;

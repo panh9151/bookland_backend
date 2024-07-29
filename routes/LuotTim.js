@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const LuotTimModel = require("../models/LuọtTim/LuotTim.js");
+const LuotTimModel = require("../models/LuotTim/LuotTimModel.js");
 
 const routerLuotTim = express.Router();
 
