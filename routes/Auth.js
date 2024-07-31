@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
+const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js"); // Giả sử NguoiDungModel được xuất đúng từ tệp này
 const routerAuth = express.Router();
 
 routerAuth.post("/login", async (req, res) => {

@@ -1,16 +1,17 @@
 const express = require("express");
-const SachModel = require("../models/Sach/SachModel");
-const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel");
-const TacgiaModel = require("../models/Tacgia/TacgiaModel");
-const { upload } = require("../config/cloudinary"); // Import cấu hình Cloudinary
+const SachModel = require("../models/Sach/SachModel.js");
+const TheLoaiSachModel = require("../models/Theloai/TheLoaiSachModel.js");
+const TacgiaModel = require("../models/Tacgia/TacgiaModel.js");
+
 const routerSach = express.Router();
 
 // Thêm sách mới
-routerSach.post("/", upload.single("img"), async (req, res) => {
+routerSach.post("/", async (req, res, next) => {
   try {
     const {
       tacgia,
       nxb,
+      img,
       mota,
       ngayxuatban,
       ten,
@@ -21,7 +22,6 @@ routerSach.post("/", upload.single("img"), async (req, res) => {
       hien_thi,
       theloaisach,
     } = req.body;
-    const img = req.file ? req.file.path : ""; // Lấy đường dẫn ảnh từ Cloudinary
 
     if (!ten || !tacgia || !theloaisach) {
       return res.status(400).json({
@@ -39,7 +39,7 @@ routerSach.post("/", upload.single("img"), async (req, res) => {
       });
     }
 
-    // Kiểm tra và lấy tên của thể loại sách từ model TheLoaiSach
+    // Kiểm tra và lấy tên của thể loại sách từ model TheloaiSach
     const theLoaiSach = await TheLoaiSachModel.findById(theloaisach);
     if (!theLoaiSach) {
       return res.status(404).json({
@@ -47,7 +47,6 @@ routerSach.post("/", upload.single("img"), async (req, res) => {
         message: "Không tìm thấy thông tin thể loại sách",
       });
     }
-
     const sachExists = await SachModel.findOne({ ten, tacgia });
     if (sachExists) {
       return res.status(400).json({
@@ -81,12 +80,13 @@ routerSach.post("/", upload.single("img"), async (req, res) => {
 });
 
 // Sửa thông tin sách
-routerSach.put("/:id", upload.single("img"), async (req, res) => {
+routerSach.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
       tacgia,
       nxb,
+      img,
       mota,
       ngayxuatban,
       ten,
@@ -97,7 +97,6 @@ routerSach.put("/:id", upload.single("img"), async (req, res) => {
       hien_thi,
       theloaisach,
     } = req.body;
-    const img = req.file ? req.file.path : ""; // Lấy đường dẫn ảnh từ Cloudinary
 
     const updatedSach = await SachModel.findByIdAndUpdate(
       id,
@@ -136,7 +135,7 @@ routerSach.put("/:id", upload.single("img"), async (req, res) => {
 });
 
 // Xóa sách
-routerSach.delete("/:id", async (req, res) => {
+routerSach.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const sach = await SachModel.findByIdAndDelete(id);
@@ -155,7 +154,7 @@ routerSach.delete("/:id", async (req, res) => {
 });
 
 // Lấy danh sách sách
-routerSach.get("/", async (req, res) => {
+routerSach.get("/", async (req, res, next) => {
   try {
     const listSach = await SachModel.find()
       .populate("tacgia", "ten")
@@ -169,7 +168,7 @@ routerSach.get("/", async (req, res) => {
 });
 
 // Lấy thông tin một cuốn sách theo ID
-routerSach.get("/:id", async (req, res) => {
+routerSach.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const sach = await SachModel.findById(id)

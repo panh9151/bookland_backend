@@ -2,13 +2,14 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const { Schema } = mongoose;
-
 function format(value) {
   if (typeof value === "string") {
     value = parseInt(value);
   }
-  //đảm bảo 10 lí tự sdt và thêm 0 đầu
-  return value.toString().padStart(10, "0");
+  if (value.toString().length === 9) {
+    return "0" + value;
+  }
+  return value;
 }
 
 const NguoiDungSchema = new Schema({
@@ -27,7 +28,7 @@ const NguoiDungSchema = new Schema({
     type: String,
     unique: true,
     required: true,
-    match: [/\S+@\S+\.\S+/, "Email không hợp lệ"],
+    // You can add more specific validation if needed, e.g., match: /regex/
   },
   ten: {
     type: String,
@@ -46,9 +47,7 @@ const NguoiDungSchema = new Schema({
     type: Date,
   },
   sdt: {
-    type: String,
-    unique: true,
-    required: true,
+    type: Number,
     set: format,
   },
   ngaytao: {
@@ -57,7 +56,9 @@ const NguoiDungSchema = new Schema({
   },
   id_gmail: {
     type: String,
-    unique: true, // Đảm bảo ID Gmail là duy nhất
+  },
+  id_facebook: {
+    type: String,
   },
   id_hienthi: {
     type: Boolean,
@@ -66,7 +67,6 @@ const NguoiDungSchema = new Schema({
   },
 });
 
-// Hash mật khẩu trước khi lưu vào cơ sở dữ liệu
 NguoiDungSchema.pre("save", async function (next) {
   if (!this.isModified("matkhau")) {
     return next();
