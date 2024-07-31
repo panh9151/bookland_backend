@@ -120,6 +120,16 @@ routerNguoiDung.put("/:id", async function (req, res, next) {
           .json({ status: 0, message: "Số điện thoại đã tồn tại" });
       }
 
+      const existingGmail = await NguoiDungModel.findOne({
+        id_gmail,
+        _id: { $ne: id },
+      });
+      if (existingGmail) {
+        return res
+          .status(400)
+          .json({ status: 0, message: "ID Gmail đã tồn tại" });
+      }
+
       // Nếu có đơn hàng, chỉ cho phép cập nhật trạng thái tài khoản
       const hasOrders = await DonHangModel.exists({ id_nguoidung: id });
       if (hasOrders) {
