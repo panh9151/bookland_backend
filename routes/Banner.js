@@ -4,7 +4,7 @@ const express = require("express");
 const routerBanner = express.Router();
 
 // Thêm banner
-routerBanner.post("/", async (req, res) => {
+routerBanner.post("/add", async (req, res) => {
   const { url, image, ngaybatdau, ngayketthuc, uutien, hien_thi } = req.body;
   try {
     const newBanner = new BannerModel({
@@ -58,7 +58,7 @@ routerBanner.delete("/:id", async (req, res) => {
 });
 
 // Lấy danh sách banner
-routerBanner.get("/", async (req, res) => {
+routerBanner.get("/list", async (req, res) => {
   const currentDate = new Date();
   try {
     const banners = await BannerModel.find({
@@ -73,7 +73,7 @@ routerBanner.get("/", async (req, res) => {
 });
 
 // get banner by id
-routerBanner.get("/:id", async (req, res) => {
+routerBanner.get("/list/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const banner = await BannerModel.findById(id);
