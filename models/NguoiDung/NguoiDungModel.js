@@ -65,6 +65,8 @@ const NguoiDungSchema = new Schema({
     default: true,
     required: true,
   },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 NguoiDungSchema.pre("save", async function (next) {
