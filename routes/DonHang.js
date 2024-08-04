@@ -1,24 +1,25 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const DonHangModel = require("../models/DonHang/DonHangModel.js");
-
+const DonHangModel = require("../models/DonHang/DonHangModel");
+const ChiTietDonHangModel = require("../models/ChiTietDonHang/ChiTietDonHangModel");
 const routerDonHang = express.Router();
 
-// Tạo đơn hàng mới
+// API Để Thêm Đơn Hàng
 routerDonHang.post("/", async (req, res) => {
-  const {
-    id_nguoidung,
-    diachi,
-    sdt,
-    nguoinhan,
-    phuongthucthanhtoan,
-    ghichu,
-    ngaydathang,
-    status,
-    thanhtoan,
-  } = req.body;
-
   try {
+    const {
+      id_nguoidung,
+      diachi,
+      sdt,
+      nguoinhan,
+      phuongthucthanhtoan,
+      ghichu,
+      ngaydathang,
+      status,
+      thanhtoan,
+      chitietdonhangs, // Dữ liệu chi tiết đơn hàng gửi kèm
+    } = req.body;
+
+    // Tạo đơn hàng mới
     const newDonHang = new DonHangModel({
       id_nguoidung,
       diachi,
@@ -29,90 +30,126 @@ routerDonHang.post("/", async (req, res) => {
       ngaydathang,
       status,
       thanhtoan,
+      chitietdonhangs, // Thêm ID chi tiết đơn hàng
     });
 
-    const savedDonHang = await newDonHang.save();
-    res.status(201).json(savedDonHang);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    await newDonHang.save();
+
+    // Cập nhật chi tiết đơn hàng để liên kết với đơn hàng mới
+    await ChiTietDonHangModel.updateMany(
+      { _id: { $in: chitietdonhangs } },
+      { $set: { id_donhang: newDonHang._id } }
+    );
+
+    res.json({ status: 1, message: "Thêm đơn hàng thành công" });
+  } catch (err) {
+    console.error("Lỗi khi thêm đơn hàng:", err);
+    res.status(500).json({ status: 0, message: "Thêm đơn hàng thất bại" });
   }
 });
 
-// Cập nhật trạng thái đơn hàng
-routerDonHang.put("/status/:id", async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "ID đơn hàng không hợp lệ" });
-  }
-
+// API Để Lấy Thông Tin Đơn Hàng
+routerDonHang.get("/:id", async (req, res) => {
   try {
+    const { id } = req.params;
+    const donHang = await DonHangModel.findById(id)
+      .populate("id_nguoidung", "ten") // Ví dụ: Lấy tên người dùng
+      .populate({
+        path: "chitietdonhangs",
+        populate: {
+          path: "id_sach", // Lấy thông tin sách từ chi tiết đơn hàng
+          select: "ten gia", // Ví dụ: Chỉ lấy tên và giá sách
+        },
+      });
+
+    if (!donHang) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy đơn hàng" });
+    }
+
+    res.json({ success: true, data: donHang });
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin đơn hàng:", error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi máy chủ" });
+  }
+});
+
+// API Để Cập Nhật Đơn Hàng
+routerDonHang.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      diachi,
+      sdt,
+      nguoinhan,
+      phuongthucthanhtoan,
+      ghichu,
+      ngaydathang,
+      status,
+      thanhtoan,
+      chitietdonhangs, // Dữ liệu chi tiết đơn hàng gửi kèm
+    } = req.body;
+
+    // Cập nhật thông tin đơn hàng
     const updatedDonHang = await DonHangModel.findByIdAndUpdate(
       id,
-      { status },
+      {
+        diachi,
+        sdt,
+        nguoinhan,
+        phuongthucthanhtoan,
+        ghichu,
+        ngaydathang,
+        status,
+        thanhtoan,
+        chitietdonhangs, // Cập nhật ID chi tiết đơn hàng
+      },
       { new: true }
     );
 
-    if (!updatedDonHang) {
-      return res.status(404).json({ message: "Đơn hàng không tồn tại" });
-    }
+    if (updatedDonHang) {
+      // Cập nhật chi tiết đơn hàng để liên kết với đơn hàng
+      await ChiTietDonHangModel.updateMany(
+        { _id: { $in: chitietdonhangs } },
+        { $set: { id_donhang: updatedDonHang._id } }
+      );
 
-    res.status(200).json(updatedDonHang);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+      res.json({
+        status: 1,
+        message: "Cập nhật đơn hàng thành công",
+        data: updatedDonHang,
+      });
+    } else {
+      res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy đơn hàng để cập nhật" });
+    }
+  } catch (err) {
+    console.error("Lỗi khi cập nhật đơn hàng:", err);
+    res.status(500).json({ status: 0, message: "Cập nhật đơn hàng thất bại" });
   }
 });
 
-// Xóa đơn hàng
+// API Để Xóa Đơn Hàng
 routerDonHang.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "ID đơn hàng không hợp lệ" });
-  }
-
   try {
-    const deletedDonHang = await DonHangModel.findByIdAndDelete(id);
+    const { id } = req.params;
+    const donHang = await DonHangModel.findByIdAndDelete(id);
 
-    if (!deletedDonHang) {
-      return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+    if (donHang) {
+      // Xóa các chi tiết đơn hàng liên quan
+      await ChiTietDonHangModel.deleteMany({ id_donhang: id });
+
+      res.json({ status: 1, message: "Xóa đơn hàng thành công" });
+    } else {
+      res
+        .status(404)
+        .json({ status: 0, message: "Không tìm thấy đơn hàng để xóa" });
     }
-
-    res.status(200).json({ message: "Xóa đơn hàng thành công" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Lấy danh sách đơn hàng
-routerDonHang.get("/", async (req, res) => {
-  try {
-    const listDonHang = await DonHangModel.find();
-    res.status(200).json(listDonHang);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Lấy thông tin một đơn hàng theo ID
-routerDonHang.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "ID đơn hàng không hợp lệ" });
-  }
-
-  try {
-    const donHang = await DonHangModel.findById(id);
-
-    if (!donHang) {
-      return res.status(404).json({ message: "Đơn hàng không tồn tại" });
-    }
-
-    res.status(200).json(donHang);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } catch (err) {
+    console.error("Lỗi khi xóa đơn hàng:", err);
+    res.status(500).json({ status: 0, message: "Xóa đơn hàng thất bại" });
   }
 });
 

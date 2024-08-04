@@ -1,6 +1,5 @@
 const express = require("express");
 const BaiVietModel = require("../models/BaiViet/BaiVietModel.js");
-const TheLoaiBaiVietModel = require("../models/TheLoaiBaiViet/TheLoaiBaiVietModel.js");
 const NguoiDungModel = require("../models/NguoiDung/NguoiDungModel.js");
 
 const routerBaiViet = express.Router();
@@ -8,9 +7,7 @@ const routerBaiViet = express.Router();
 // Lấy danh sách bài viết
 routerBaiViet.get("/", async (req, res, next) => {
   try {
-    const listBaiViet = await BaiVietModel.find()
-      .populate("theloaibaiviet", "ten")
-      .populate("nguoidung", "ten");
+    const listBaiViet = await BaiVietModel.find().populate("nguoidung", "ten");
     res.json({ success: true, data: listBaiViet });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bài viết:", error);
@@ -22,9 +19,10 @@ routerBaiViet.get("/", async (req, res, next) => {
 routerBaiViet.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const baiViet = await BaiVietModel.findById(id)
-      .populate("theloaibaiviet", "ten")
-      .populate("nguoidung", "ten");
+    const baiViet = await BaiVietModel.findById(id).populate(
+      "nguoidung",
+      "ten"
+    );
 
     if (baiViet) {
       res.json({ success: true, data: baiViet });
@@ -42,7 +40,6 @@ routerBaiViet.get("/:id", async (req, res, next) => {
 // Thêm bài viết mới
 routerBaiViet.post("/", async (req, res) => {
   const {
-    theloaibaiviet,
     nguoidung,
     img,
     ngaycapnhat,
@@ -55,24 +52,15 @@ routerBaiViet.post("/", async (req, res) => {
   } = req.body;
 
   // Kiểm tra các trường bắt buộc
-  if (!theloaibaiviet || !nguoidung || !noidung || !tieude) {
+  if (!nguoidung || !noidung || !tieude) {
     return res.status(400).json({
       success: false,
       message:
-        "Các trường bắt buộc không được để trống: theloaibaiviet, nguoidung, noidung, tieude",
+        "Các trường bắt buộc không được để trống: nguoidung, noidung, tieude",
     });
   }
 
   try {
-    // Kiểm tra theloaibaiviet có tồn tại không
-    const theLoaiExists = await TheLoaiBaiVietModel.findById(theloaibaiviet);
-    if (!theLoaiExists) {
-      return res.status(400).json({
-        success: false,
-        message: "Thể loại bài viết không tồn tại",
-      });
-    }
-
     // Kiểm tra nguoidung có tồn tại không
     const nguoiDungExists = await NguoiDungModel.findById(nguoidung);
     if (!nguoiDungExists) {
@@ -81,6 +69,7 @@ routerBaiViet.post("/", async (req, res) => {
         message: "Người dùng không tồn tại",
       });
     }
+
     // Kiểm tra bài viết đã tồn tại chưa
     const baiVietExists = await BaiVietModel.findOne({ tieude, nguoidung });
     if (baiVietExists) {
@@ -91,7 +80,6 @@ routerBaiViet.post("/", async (req, res) => {
     }
 
     const newBaiViet = new BaiVietModel({
-      theloaibaiviet,
       nguoidung,
       img,
       ngaycapnhat: ngaycapnhat || Date.now(),
@@ -122,7 +110,6 @@ routerBaiViet.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
-      theloaibaiviet,
       nguoidung,
       img,
       ngaycapnhat,
@@ -133,15 +120,6 @@ routerBaiViet.put("/:id", async (req, res, next) => {
       tieude,
       trangthai,
     } = req.body;
-
-    // Kiểm tra theloaibaiviet có tồn tại không
-    const theLoaiExists = await TheLoaiBaiVietModel.findById(theloaibaiviet);
-    if (!theLoaiExists) {
-      return res.status(400).json({
-        success: false,
-        message: "Thể loại bài viết không tồn tại",
-      });
-    }
 
     // Kiểm tra nguoidung có tồn tại không
     const nguoiDungExists = await NguoiDungModel.findById(nguoidung);
@@ -155,7 +133,6 @@ routerBaiViet.put("/:id", async (req, res, next) => {
     const updatedBaiViet = await BaiVietModel.findByIdAndUpdate(
       id,
       {
-        theloaibaiviet,
         nguoidung,
         img,
         ngaycapnhat,
@@ -171,18 +148,21 @@ routerBaiViet.put("/:id", async (req, res, next) => {
 
     if (updatedBaiViet) {
       res.json({
-        status: 1,
+        success: true,
         message: "Sửa thông tin bài viết thành công",
         data: updatedBaiViet,
       });
     } else {
       res
         .status(404)
-        .json({ status: 0, message: "Không tìm thấy bài viết để sửa đổi" });
+        .json({
+          success: false,
+          message: "Không tìm thấy bài viết để sửa đổi",
+        });
     }
   } catch (err) {
     console.error("Lỗi khi sửa bài viết:", err);
-    res.status(500).json({ status: 0, message: "Sửa bài viết thất bại" });
+    res.status(500).json({ success: false, message: "Sửa bài viết thất bại" });
   }
 });
 
@@ -190,18 +170,18 @@ routerBaiViet.put("/:id", async (req, res, next) => {
 routerBaiViet.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const BaiViet = await BaiVietModel.findByIdAndDelete(id);
+    const baiViet = await BaiVietModel.findByIdAndDelete(id);
 
-    if (BaiViet) {
-      res.json({ status: 1, message: "Xóa bài viết thành công" });
+    if (baiViet) {
+      res.json({ success: true, message: "Xóa bài viết thành công" });
     } else {
       res
         .status(404)
-        .json({ status: 0, message: "Không tìm thấy bài viết để xóa" });
+        .json({ success: false, message: "Không tìm thấy bài viết để xóa" });
     }
   } catch (err) {
     console.error("Lỗi khi xóa bài viết:", err);
-    res.status(500).json({ status: 0, message: "Xóa bài viết thất bại" });
+    res.status(500).json({ success: false, message: "Xóa bài viết thất bại" });
   }
 });
 
