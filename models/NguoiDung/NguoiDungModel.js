@@ -28,7 +28,6 @@ const NguoiDungSchema = new Schema({
     type: String,
     unique: true,
     required: true,
-    // You can add more specific validation if needed, e.g., match: /regex/
   },
   ten: {
     type: String,

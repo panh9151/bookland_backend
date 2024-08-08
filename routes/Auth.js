@@ -37,33 +37,33 @@ routerAuth.post("/login", async (req, res) => {
 });
 
 // Route đăng ký
-// routerAuth.post("/register", async (req, res) => {
-//   const { email, matkhau } = req.body;
-//   const loaitaikhoan = 0;
+routerAuth.post("/dangky", async (req, res) => {
+  const { email, matkhau } = req.body;
+  const loaitaikhoan = 0;
 
-//   try {
-//     // Kiểm tra nếu email đã tồn tại
-//     const NguoiDungExist = await NguoiDungModel.findOne({ email });
-//     if (NguoiDungExist) {
-//       return res.status(400).json({ message: "Email đã được sử dụng" });
-//     }
+  try {
+    // Kiểm tra nếu email đã tồn tại
+    const NguoiDungExist = await NguoiDungModel.findOne({ email });
+    if (NguoiDungExist) {
+      return res.status(400).json({ message: "Email đã được sử dụng" });
+    }
 
-//     // Hash mật khẩu
-//     const hashedPassword = await bcrypt.hash(matkhau, 10);
+    // Hash mật khẩu
+    const hashedPassword = await bcrypt.hash(matkhau, 10);
 
-//     // Tạo người dùng mới
-//     const newUser = new NguoiDungModel({
-//       email,
-//       matkhau: hashedPassword,
-//       loaitaikhoan,
-//     });
-//     await newUser.save();
+    // Tạo người dùng mới
+    const newUser = new NguoiDungModel({
+      email,
+      matkhau: hashedPassword,
+      loaitaikhoan,
+    });
+    await newUser.save();
 
-//     res.status(201).json({ message: "Đăng ký thành công" });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+    res.status(201).json({ message: "Đăng ký thành công" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Route lấy thông tin người dùng
 routerAuth.get("/profile", authMiddleware, async (req, res) => {
